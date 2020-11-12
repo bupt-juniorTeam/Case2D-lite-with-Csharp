@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Case2D-lite", "Case2D-lite.csproj", "{CEEC50A0-A21E-4CAA-97B4-172B9320A9AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEEC50A0-A21E-4CAA-97B4-172B9320A9AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEEC50A0-A21E-4CAA-97B4-172B9320A9AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEEC50A0-A21E-4CAA-97B4-172B9320A9AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEEC50A0-A21E-4CAA-97B4-172B9320A9AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFD2955A-96B7-4979-B95E-DBA20C287CCD}
+	EndGlobalSection
+EndGlobal
