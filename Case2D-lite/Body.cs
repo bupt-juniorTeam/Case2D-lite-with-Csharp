@@ -9,20 +9,20 @@ namespace Case2D_lite
 {
 	public class Body
 	{
-		private Vector2f position; // 位置(x,y)
-		private float rotation; // 旋转角度
+		public Vector2f position; // 位置(x,y)
+		public float rotation; // 旋转角度
 
-		private Vector2f velocity; // 速度
-		private float angularVelocity; // 角速度
+		public Vector2f velocity; // 速度
+		public float angularVelocity; // 角速度
 
-		private Vector2f force; // 力
-		private float torque; // 力矩
+		public Vector2f force; // 力
+		public float torque; // 力矩
 
-		private Vector2f width; // 长和宽 (w,h)
+		public Vector2f width; // 长和宽 (w,h)
 
-		private float friction; // 摩擦力
-		private float mass, invMass; // 质量 1/质量
-		private float I, invI; // 转动惯量 1/转动惯量
+		public float friction; // 摩擦力
+		public float mass, invMass; // 质量 1/质量
+		public float I, invI; // 转动惯量 1/转动惯量
 
 		public Body()
 		{
