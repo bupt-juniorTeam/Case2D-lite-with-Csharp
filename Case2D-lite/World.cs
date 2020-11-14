@@ -104,8 +104,8 @@ namespace Case2D_lite {
                     if (bi.invMass == 0.0f && bj.invMass == 0.0f)
                         continue;
 
-                    Arbiter newArb = new Arbiter(bi, bj);
-                    ArbiterKey key(bi, bj);
+                    Arbiter newArb = new Arbiter(ref bi, ref bj);
+                    ArbiterKey key = new ArbiterKey(bi, bj);
 
                     if (newArb.numContacts > 0)
                     {
@@ -116,7 +116,7 @@ namespace Case2D_lite {
                         }
                         else
                         {
-                            iter.Update(newArb.contacts, newArb.numContacts);
+                            iter.Update(ref newArb.contacts, newArb.numContacts);
                         }
                     }
                     else

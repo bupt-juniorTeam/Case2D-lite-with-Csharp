@@ -41,7 +41,7 @@ namespace Case2D_lite {
         {
 
         }
-        public static int Collide(Contact contacts, Body bodyA, Body bodyB)
+        public static int Collide(Contact[] contacts, Body bodyA, Body bodyB)
         {
             return 0;
         }

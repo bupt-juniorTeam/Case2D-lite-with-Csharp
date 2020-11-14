@@ -12,10 +12,10 @@ namespace Case2D_lite
     {
 		public struct Edges
 		{
-			char inEdge1;
-			char outEdge1;
-			char inEdge2;
-			char outEdge2;
+			public char inEdge1;
+			public char outEdge1;
+			public char inEdge2;
+			public char outEdge2;
 		};
 		public Edges e;
 		public int value;
@@ -45,8 +45,8 @@ namespace Case2D_lite
 	{
 		public const int MAX_POINTS = 2;
 
-		Contact[] contacts = new Contact[MAX_POINTS];
-		int numContacts;
+		public Contact[] contacts = new Contact[MAX_POINTS];
+		public int numContacts;
 
 		Body body1;
 		Body body2;
@@ -55,7 +55,7 @@ namespace Case2D_lite
 
 		public Arbiter(ref Body b1, ref Body b2)
 		{
-			numContacts = Collision.Collide(contacts, body1, body2);
+			numContacts = Collition.Collide(contacts, body1, body2);
 			friction = (float)Math.Sqrt(body1.friction * body2.friction);
 
 		}
