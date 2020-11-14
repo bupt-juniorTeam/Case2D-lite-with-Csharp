@@ -12,9 +12,9 @@ namespace Case2D_lite {
         public List<Body> bodies;
         public List<Joint> joints;
         public Dictionary<ArbiterKey, Arbiter> arbiters;
-        public static bool accumulateImpulses;
-        public static bool warmStarting;
-        public static bool positionCorrection;
+        public static bool accumulateImpulses = true;
+        public static bool warmStarting = true;
+        public static bool positionCorrection = true;
         World(Vector2f gravity,int iterations)
         {
             this.gravity = gravity;
@@ -40,10 +40,10 @@ namespace Case2D_lite {
 
             BroadPhase();
 
-            // Integrate forces.
-            for (int i = 0; i < (int)bodies.size(); ++i)
+            // 更新力
+            for (int i = 0; i < bodies.Count(); ++i)
             {
-                Body* b = bodies[i];
+                Body b = bodies[i];
 
                 if (b.invMass == 0.0f)
                     continue;
@@ -52,13 +52,13 @@ namespace Case2D_lite {
                 b.angularVelocity += dt * b.invI * b.torque;
             }
 
-            // Perform pre-steps.
-            for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
+            // 运行 pre-step
+            foreach (var arb in arbiters)
             {
-                arb.second.PreStep(inv_dt);
+                arb.Value.PreStep(inv_dt);
             }
 
-            for (int i = 0; i < (int)joints.size(); ++i)
+            for (int i = 0; i < joints.Count(); ++i)
             {
                 joints[i].PreStep(inv_dt);
             }
@@ -66,21 +66,21 @@ namespace Case2D_lite {
             // Perform iterations
             for (int i = 0; i < iterations; ++i)
             {
-                for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
+                foreach (var arb in arbiters)
                 {
-                    arb.second.ApplyImpulse();
+                    arb.Value.ApplyImpulse();
                 }
 
-                for (int j = 0; j < (int)joints.size(); ++j)
+                for (int j = 0; j < joints.Count(); ++j)
                 {
                     joints[j].ApplyImpulse();
                 }
             }
 
-            // Integrate Velocities
-            for (int i = 0; i < (int)bodies.size(); ++i)
+            // 更新速度
+            for (int i = 0; i < bodies.Count(); ++i)
             {
-                Body* b = bodies[i];
+                Body b = bodies[i];
 
                 b.position += dt * b.velocity;
                 b.rotation += dt * b.angularVelocity;
@@ -93,35 +93,35 @@ namespace Case2D_lite {
         public void BroadPhase()
         {
             // O(n^2) broad-phase
-            for (int i = 0; i < (int)bodies.size(); ++i)
+            for (int i = 0; i < (int)bodies.Count(); ++i)
             {
-                Body* bi = bodies[i];
+                Body bi = bodies[i];
 
-                for (int j = i + 1; j < (int)bodies.size(); ++j)
+                for (int j = i + 1; j < (int)bodies.Count(); ++j)
                 {
-                    Body* bj = bodies[j];
+                    Body bj = bodies[j];
 
                     if (bi.invMass == 0.0f && bj.invMass == 0.0f)
                         continue;
 
-                    Arbiter newArb(bi, bj);
+                    Arbiter newArb = new Arbiter(bi, bj);
                     ArbiterKey key(bi, bj);
 
                     if (newArb.numContacts > 0)
                     {
-                        ArbIter iter = arbiters.find(key);
-                        if (iter == arbiters.end())
+                        bool is_find = arbiters.TryGetValue(key, out Arbiter iter);
+                        if (!is_find)
                         {
-                            arbiters.insert(ArbPair(key, newArb));
+                            arbiters.Add(key, newArb);
                         }
                         else
                         {
-                            iter.second.Update(newArb.contacts, newArb.numContacts);
+                            iter.Update(newArb.contacts, newArb.numContacts);
                         }
                     }
                     else
                     {
-                        arbiters.erase(key);
+                        arbiters.Remove(key);
                     }
                 }
             }
