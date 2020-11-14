@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Case2D.Common
+using Case2D.Common;
 // Box vertex and edge numbering:
 //
 //        ^ y
@@ -17,15 +17,13 @@ using Case2D.Common
 //        e3
 
 namespace Case2D_lite {
-
-
-    class Collide {
-        class ClipVertex {
+    class Collition {
+        public class ClipVertex {
             ClipVertex() { fp.value = 0; }
             Vector2f v;
             FeaturePair fp;
         };
-        public void Filp(FeaturePair fp)
+        public static void Filp(FeaturePair fp)
         {
             var temp = fp.e.inEdge1;
             fp.e.inEdge1 = fp.e.inEdge2;
@@ -35,15 +33,15 @@ namespace Case2D_lite {
             fp.e.outEdge1 = fp.e.outEdge2;
             fp.e.outEdge2 = temp;
         }
-        public int ClipSegmentToLine(ClipVertex[] vOut, ClipVertex[] vIn,Vector2f normal, float offset, char clipEdge)
+        public static int ClipSegmentToLine(ClipVertex[] vOut, ClipVertex[] vIn,Vector2f normal, float offset, char clipEdge)
         {
-
+            return 0;
         }
         public static void ComputeIncidentEdge(ClipVertex[] c,Vector2f h, Vector2f pos,Mat22 Rot,Vector2f normal)
         {
 
         }
-        public int Collide(Contact contacts, Body bodyA, Body bodyB)
+        public static int Collide(Contact contacts, Body bodyA, Body bodyB)
         {
             return 0;
         }

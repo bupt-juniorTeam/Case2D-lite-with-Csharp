@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Arbiter.cs" />
     <Compile Include="Body.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="Collide.cs" />
     <Compile Include="Math.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
