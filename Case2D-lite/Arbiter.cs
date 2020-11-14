@@ -35,8 +35,8 @@ namespace Case2D_lite
 	}
 	public struct ArbiterKey
 	{
-		Body body1;
-		Body body2;
+		public Body body1;
+		public Body body2;
 		//ArbiterKey(ref Body b1, ref Body b2) 
 		//{
 		//}

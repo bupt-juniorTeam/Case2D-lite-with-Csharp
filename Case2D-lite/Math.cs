@@ -983,5 +983,9 @@ namespace Case2D.Common
         {
             return new Vector2f(Math.Abs(a.x), Math.Abs(a.y));
         }
+        public static float Clamp(float a, float low, float high)
+        {
+            return Math.Max(low, Math.Min(a, high));
+        }
     }
 }

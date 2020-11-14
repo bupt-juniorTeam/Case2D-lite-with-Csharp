@@ -105,8 +105,9 @@ namespace Case2D_lite {
                         continue;
 
                     Arbiter newArb = new Arbiter(ref bi, ref bj);
-                    ArbiterKey key = new ArbiterKey(bi, bj);
-
+                    ArbiterKey key;
+                    key.body1 = bi;
+                    key.body2 = bj;
                     if (newArb.numContacts > 0)
                     {
                         bool is_find = arbiters.TryGetValue(key, out Arbiter iter);
