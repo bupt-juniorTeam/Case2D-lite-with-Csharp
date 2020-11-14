@@ -9,8 +9,8 @@ namespace Case2D_lite {
     class World {
         public int iterations;
         public Vector2f gravity;
-        public ArrayList<Body> bodies;
-        public ArrayList<Joint> joints;
+        public List<Body> bodies;
+        public List<Joint> joints;
         public Dictionary<ArbiterKey, Arbiter> arbiters;
         public static bool accumulateImpulses;
         public static bool warmStarting;
