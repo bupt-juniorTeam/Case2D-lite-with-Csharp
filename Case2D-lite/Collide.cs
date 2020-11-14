@@ -25,13 +25,27 @@ namespace Case2D_lite {
             Vector2f v;
             FeaturePair fp;
         };
-        public void Filp(FeaturePair& fp)
+        public void Filp(FeaturePair fp)
         {
+            var temp = fp.e.inEdge1;
+            fp.e.inEdge1 = fp.e.inEdge2;
+            fp.e.inEdge2 = temp;
 
+            temp = fp.e.outEdge1;
+            fp.e.outEdge1 = fp.e.outEdge2;
+            fp.e.outEdge2 = temp;
         }
         public int ClipSegmentToLine(ClipVertex[] vOut, ClipVertex[] vIn,Vector2f normal, float offset, char clipEdge)
         {
 
+        }
+        public static void ComputeIncidentEdge(ClipVertex[] c,Vector2f h, Vector2f pos,Mat22 Rot,Vector2f normal)
+        {
+
+        }
+        public int Collide(Contact contacts, Body bodyA, Body bodyB)
+        {
+            return 0;
         }
     }
 }
