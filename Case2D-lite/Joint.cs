@@ -62,10 +62,10 @@ namespace Case2D_lite
 
             r1 = Rot1 * localAnchor1;
             r2 = Rot2 * localAnchor2;
-
+            
             //相对质量计算公式
             // deltaV = deltaV0 + K * impulse
-            // invM = [(1/m1 + 1/m2) * eye(2) - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
+            // invM = [(1/m1 + 1/m2) * I - skew(r1) * invI1 * skew(r1) - skew(r2) * invI2 * skew(r2)]
             //      = [1/m1+1/m2     0    ] + invI1 * [r1.y*r1.y -r1.x*r1.y] + invI2 * [r1.y*r1.y -r1.x*r1.y]
             //        [    0     1/m1+1/m2]           [-r1.x*r1.y r1.x*r1.x]           [-r1.x*r1.y r1.x*r1.x]
             Mat22 K1 = new Mat22();
