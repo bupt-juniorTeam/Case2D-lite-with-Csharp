@@ -305,7 +305,24 @@ namespace Case2D.Common
     //二维矩阵
     public class Mat22
     {
+        //两个列向量
+        public Vector2f ex, ey;
+
         public Mat22() { }
+        public Mat22(float angle)
+        {
+            float c = (float)Math.Cos(angle);
+            float s = (float)Math.Sin(angle);
+            ex.x = c;
+            ey.x = -s;
+            ex.y = s;
+            ey.y = c;
+        }
+        
+        public Mat22 Transpose()
+        {
+            return new Mat22(ex.x, ex.y, ey.x, ey.y);
+        }
         /**************************************************************************
         * 功能描述：使用列向量构造这个矩阵
         * 参数说明： c1  ：第一列向量
@@ -404,8 +421,7 @@ namespace Case2D.Common
             x.y = det * (a11 * b.y - a21 * b.x);
             return x;
         }
-        //两个列向量
-        public Vector2f ex, ey;
+        
 
         /**************************************************************************
        * 功能描述： 计算两个2X2矩阵相加
@@ -417,12 +433,18 @@ namespace Case2D.Common
         {
             return new Mat22(A.ex + B.ex, A.ey + B.ey);
         }
-        /**************************************************************************
-        * 功能描述： 计算两个2X2矩阵相乘
-        * 参数说明： a :2X2矩阵
-                     b :2X2矩阵
-        * 返 回 值： 2X2矩阵
-        **************************************************************************/
+
+        //矩阵和向量相乘
+        public static Vector2f operator*(Mat22 A,Vector2f v)
+        {
+            return new Vector2f(A.ex.x * v.x + A.ey.x * v.y, A.ex.y * v.x + A.ey.y * v.y);
+        }
+
+        public static Mat22 operator*(Mat22 A,Mat22 B)
+        {
+            return new Mat22(A * B.ex, A * B.ey);
+        }
+
     };
 
     //三维矩阵
