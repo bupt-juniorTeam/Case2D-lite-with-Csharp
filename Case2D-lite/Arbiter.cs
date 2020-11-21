@@ -55,7 +55,7 @@ namespace Case2D_lite
 
 		public Arbiter(ref Body b1, ref Body b2)
 		{
-			numContacts = Collition.Collide(contacts, body1, body2); // contact的个数
+			numContacts = Collision.Collide(contacts, body1, body2); // contact的个数
 			friction = (float)Math.Sqrt(body1.friction * body2.friction); // 摩擦力
 		}
 

@@ -17,7 +17,7 @@ using Case2D.Common;
 //        e3
 
 namespace Case2D_lite {
-    class Collition {
+    class Collision {
         enum Axis {
             FACE_A_X,
             FACE_A_Y,
