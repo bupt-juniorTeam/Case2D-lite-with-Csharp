@@ -1005,9 +1005,17 @@ namespace Case2D.Common
         {
             return new Vector2f(Math.Abs(a.x), Math.Abs(a.y));
         }
-        public static float Clamp(float a, float low, float high)
+        public static Mat22 Abs(Mat22 A)
+        {
+	        return new Mat22(Abs(A.ex), Abs(A.ey));
+        }
+    public static float Clamp(float a, float low, float high)
         {
             return Math.Max(low, Math.Min(a, high));
+        }
+        public static float Sign(float x)
+        {
+            return x < 0.0f ? -1.0f : 1.0f;
         }
     }
 }

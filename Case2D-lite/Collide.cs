@@ -96,14 +96,66 @@ namespace Case2D_lite {
         /// <summary>
         /// 计算射入边
         /// </summary>
-        /// <param name="c"></param>
+        /// <param name="c">两个碰撞点</param>
         /// <param name="h"></param>
         /// <param name="pos"></param>
         /// <param name="Rot"></param>
         /// <param name="normal">此法向量为参考面的法向量</param>
-        public static void ComputeIncidentEdge(ClipVertex[] c,Vector2f h, Vector2f pos,Mat22 Rot,Vector2f normal)
+        public static void ComputeIncidentEdge(ref ClipVertex[] c,Vector2f h, Vector2f pos,Mat22 Rot,Vector2f normal)
         {
+            Mat22 RotT = Rot.Transpose();
+            Vector2f n = -(RotT * normal);
+            Vector2f nAbs = MyMath.Abs(n);
 
+            if (nAbs.x > nAbs.y)
+            {
+                if (MyMath.Sign(n.x) > 0.0f)
+                {
+                    c[0].v.Set(h.x, -h.y);
+                    c[0].fp.e.inEdge2 = (char)EdgeNumbers.EDGE3;
+                    c[0].fp.e.outEdge2 = (char)EdgeNumbers.EDGE4;
+
+                    c[1].v.Set(h.x, h.y);
+                    c[1].fp.e.inEdge2 = (char)EdgeNumbers.EDGE4;
+                    c[1].fp.e.outEdge2 = (char)EdgeNumbers.EDGE1;
+                }
+                else
+                {
+                    c[0].v.Set(-h.x, h.y);
+                    c[0].fp.e.inEdge2 = (char)EdgeNumbers.EDGE1;
+                    c[0].fp.e.outEdge2 = (char)EdgeNumbers.EDGE2;
+
+                    c[1].v.Set(-h.x, -h.y);
+                    c[1].fp.e.inEdge2 = (char)EdgeNumbers.EDGE2;
+                    c[1].fp.e.outEdge2 = (char)EdgeNumbers.EDGE3;
+                }
+            }
+            else
+            {
+                if (MyMath.Sign(n.y) > 0.0f)
+                {
+                    c[0].v.Set(h.x, h.y);
+                    c[0].fp.e.inEdge2 = (char)EdgeNumbers.EDGE4;
+                    c[0].fp.e.outEdge2 = (char)EdgeNumbers.EDGE1;
+
+                    c[1].v.Set(-h.x, h.y);
+                    c[1].fp.e.inEdge2 = (char)EdgeNumbers.EDGE1;
+                    c[1].fp.e.outEdge2 = (char)EdgeNumbers.EDGE2;
+                }
+                else
+                {
+                    c[0].v.Set(-h.x, -h.y);
+                    c[0].fp.e.inEdge2 = (char)EdgeNumbers.EDGE2;
+                    c[0].fp.e.outEdge2 = (char)EdgeNumbers.EDGE3;
+
+                    c[1].v.Set(h.x, -h.y);
+                    c[1].fp.e.inEdge2 = (char)EdgeNumbers.EDGE3;
+                    c[1].fp.e.outEdge2 = (char)EdgeNumbers.EDGE4;
+                }
+            }
+
+            c[0].v = pos + Rot * c[0].v;
+            c[1].v = pos + Rot * c[1].v;
         }
         /// <summary>
         /// 
@@ -114,7 +166,170 @@ namespace Case2D_lite {
         /// <returns></returns>
         public static int Collide(Contact[] contacts, Body bodyA, Body bodyB)
         {
-            return 0;
+        // 初始化
+            Vector2f hA = 0.5f * bodyA.width;
+
+            Vector2f hB = 0.5f * bodyB.width;
+            Vector2f posA = bodyA.position;
+            Vector2f posB = bodyB.position;
+
+            Mat22 RotA = new Mat22(bodyA.rotation);
+            Mat22 RotB = new Mat22(bodyB.rotation);
+            Mat22 RotAT = RotA.Transpose();
+            Mat22 RotBT = RotB.Transpose();
+
+            Vector2f dp = posB - posA;
+            Vector2f dA = RotAT * dp;
+            Vector2f dB = RotBT * dp;
+
+            Mat22 C = RotAT * RotB;
+            Mat22 absC = MyMath.Abs(C);
+            Mat22 absCT = absC.Transpose();
+
+            // Box A faces
+            Vector2f faceA = MyMath.Abs(dA) - hA - absC * hB;
+            if (faceA.x > 0.0f || faceA.y > 0.0f)
+                return 0;
+            // Box B faces
+            Vector2f faceB = MyMath.Abs(dB) - hB - absC * hA;
+            if (faceB.x > 0.0f || faceB.y > 0.0f)
+                return 0;
+        // 找到最佳碰撞轴
+            Axis axis;
+            float separation;
+            Vector2f normal;
+
+            // Box A faces
+            axis = Axis.FACE_A_X;
+            separation = faceA.x;
+            normal = dA.x > 0.0f ? RotA.ex : -RotA.ex;
+
+            const float relativeTol = 0.95f;
+            const float absoluteTol = 0.01f;
+
+            if (faceA.y > relativeTol * separation + absoluteTol * hA.y)
+            {
+                axis = Axis.FACE_A_Y;
+                separation = faceA.y;
+                normal = dA.y > 0.0f ? RotA.ey : -RotA.ey;
+            }
+            // Box B faces
+            if (faceB.x > relativeTol * separation + absoluteTol * hB.x)
+            {
+                axis = Axis.FACE_B_X;
+                separation = faceB.x;
+                normal = dB.x > 0.0f ? RotB.ex : -RotB.ex;
+            }
+
+            if (faceB.y > relativeTol * separation + absoluteTol * hB.y)
+            {
+                axis = Axis.FACE_B_Y;
+                separation = faceB.y;
+                normal = dB.y > 0.0f ? RotB.ey : -RotB.ey;
+            }
+        // 根据分离轴初始化分离平面
+            Vector2f frontNormal = new Vector2f(), 
+                sideNormal = new Vector2f();
+            ClipVertex[] incidentEdge = new ClipVertex[2];
+            float front = 0.0f, negSide = 0.0f, posSide = 0.0f;
+            char negEdge = (char)EdgeNumbers.NO_EDGE, posEdge = (char)EdgeNumbers.NO_EDGE;
+            // 计算分离线和要分离的线段
+            switch (axis)
+            {
+                case Axis.FACE_A_X:
+                    {
+                        frontNormal = normal;
+                        front = MyMath.Dot(posA, frontNormal) + hA.x;
+                        sideNormal = RotA.ey;
+                        float side = MyMath.Dot(posA, sideNormal);
+                        negSide = -side + hA.y;
+                        posSide = side + hA.y;
+                        negEdge = (char)EdgeNumbers.EDGE3;
+                        posEdge = (char)EdgeNumbers.EDGE1;
+                        ComputeIncidentEdge(ref incidentEdge, hB, posB, RotB, frontNormal);
+                    }
+                    break;
+                case Axis.FACE_A_Y:
+                    {
+                        frontNormal = normal;
+                        front = MyMath.Dot(posA, frontNormal) + hA.y;
+                        sideNormal = RotA.ex;
+                        float side = MyMath.Dot(posA, sideNormal);
+                        negSide = -side + hA.x;
+                        posSide = side + hA.x;
+                        negEdge = (char)EdgeNumbers.EDGE2;
+                        posEdge = (char)EdgeNumbers.EDGE4;
+                        ComputeIncidentEdge(ref incidentEdge, hB, posB, RotB, frontNormal);
+                    }
+                    break;
+
+                case Axis.FACE_B_X:
+                    {
+                        frontNormal = -normal;
+                        front = MyMath.Dot(posB, frontNormal) + hB.x;
+                        sideNormal = RotB.ey;
+                        float side = MyMath.Dot(posB, sideNormal);
+                        negSide = -side + hB.y;
+                        posSide = side + hB.y;
+                        negEdge = (char)EdgeNumbers.EDGE3;
+                        posEdge = (char)EdgeNumbers.EDGE1;
+                        ComputeIncidentEdge(ref incidentEdge, hA, posA, RotA, frontNormal);
+                    }
+                    break;
+
+                case Axis.FACE_B_Y:
+                    {
+                        frontNormal = -normal;
+                        front = MyMath.Dot(posB, frontNormal) + hB.y;
+                        sideNormal = RotB.ex;
+                        float side = MyMath.Dot(posB, sideNormal);
+                        negSide = -side + hB.x;
+                        posSide = side + hB.x;
+                        negEdge = (char)EdgeNumbers.EDGE2;
+                        posEdge = (char)EdgeNumbers.EDGE4;
+                        ComputeIncidentEdge(ref incidentEdge, hA, posA, RotA, frontNormal);
+                    }
+                    break;
+            }
+            // 分离其他面
+            ClipVertex[] clipPoints1 = new ClipVertex[2];
+            ClipVertex[] clipPoints2 = new ClipVertex[2];
+            int np;
+
+            // Clip to box side 1
+            np = ClipSegmentToLine(ref clipPoints1, ref incidentEdge, -sideNormal, negSide, negEdge);
+
+            if (np < 2)
+                return 0;
+
+            // Clip to negative box side 1
+            np = ClipSegmentToLine(ref clipPoints2, ref clipPoints1, sideNormal, posSide, posEdge);
+
+            if (np < 2)
+                return 0;
+
+            // Now clipPoints2 contains the clipping points.
+            // 由于舍入，分离可能删去所有点
+
+            int numContacts = 0;
+            for (int i = 0; i < 2; ++i)
+            {
+                separation = MyMath.Dot(frontNormal, clipPoints2[i].v) - front;
+
+                if (separation <= 0)
+                {
+                    contacts[numContacts].separation = separation;
+                    contacts[numContacts].normal = normal;
+                    // slide contact point onto reference face (easy to cull)
+                    contacts[numContacts].position = clipPoints2[i].v - separation * frontNormal;
+                    contacts[numContacts].feature = clipPoints2[i].fp;
+                    if (axis == Axis.FACE_B_X || axis == Axis.FACE_B_Y)
+                        Flip(contacts[numContacts].feature);
+                    ++numContacts;
+                }
+            }
+
+            return numContacts;
         }
     }
 }
