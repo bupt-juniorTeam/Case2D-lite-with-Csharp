@@ -34,6 +34,14 @@ namespace Case2D_lite {
             joints.Clear();
             arbiters.Clear();
         }
+
+        /// <summary>
+        /// 分为几个阶段：
+        /// 碰撞检测：BroadPhase NarrowPhase(调用collide())
+        /// 计算受力(加速度)：更新速度
+        /// 计算约束：关节(joint) 碰撞(contact)，进而更新速度
+        /// 更新位置：position 
+        /// </summary>
         public void Step(float dt)
         {
             float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
