@@ -12,10 +12,10 @@ namespace Case2D_lite
 		public Vector2f position; // 位置(x,y)
 		public float rotation; // 旋转角度
 
-		public Vector2f velocity; // 速度
+		public Vector2f velocity; // 速度(向量)
 		public float angularVelocity; // 角速度
 
-		public Vector2f force; // 力
+		public Vector2f force; // 力(向量)
 		public float torque; // 力矩
 
 		public Vector2f width; // 长和宽 (w,h)
@@ -57,7 +57,7 @@ namespace Case2D_lite
 			if (mass < float.MaxValue)
 			{
 				invMass = 1.0f / mass;
-				I = mass * (width.x * width.x + width.y * width.y) / 12.0f;
+				I = mass * (width.x * width.x + width.y * width.y) / 12.0f; // 长方体转动惯量计算公式
 				invI = 1.0f / I;
 			}
 			else

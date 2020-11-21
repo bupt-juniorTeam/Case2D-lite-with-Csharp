@@ -7,18 +7,18 @@ using System.Collections;
 using Case2D.Common;
 namespace Case2D_lite {
     class World {
-        public int iterations;
-        public Vector2f gravity;
-        public List<Body> bodies;
-        public List<Joint> joints;
-        public Dictionary<ArbiterKey, Arbiter> arbiters;
+        public int iterations; // 迭代速度
+        public Vector2f gravity; // 重力加速度
+        public List<Body> bodies; // 物体
+        public List<Joint> joints; // 关节
+        public Dictionary<ArbiterKey, Arbiter> arbiters; // 碰撞
         public static bool accumulateImpulses = true;
         public static bool warmStarting = true;
         public static bool positionCorrection = true;
         World(Vector2f gravity,int iterations)
         {
-            this.gravity = gravity;
-            this.iterations = iterations;
+            this.gravity = gravity; // 重力加速度(0,-9.8)
+            this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations
         }
         public void Add(Body body)
         {
@@ -36,31 +36,31 @@ namespace Case2D_lite {
         }
         public void Step(float dt)
         {
-            float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f;
+            float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
 
             BroadPhase();
 
             // 更新力
-            for (int i = 0; i < bodies.Count(); ++i)
+            for (int i = 0; i < bodies.Count(); ++i) // 遍历所有物体
             {
                 Body b = bodies[i];
 
-                if (b.invMass == 0.0f)
+                if (b.invMass == 0.0f) // 质量无限大
                     continue;
 
-                b.velocity += dt * (gravity + b.invMass * b.force);
-                b.angularVelocity += dt * b.invI * b.torque;
+                b.velocity += dt * (gravity + b.invMass * b.force); // 速度改变：重力加速度+加速度(向量)
+                b.angularVelocity += dt * b.invI * b.torque; // 角速度改变：力矩/转动惯量
             }
 
             // 运行 pre-step
             foreach (var arb in arbiters)
             {
-                arb.Value.PreStep(inv_dt);
+                arb.Value.PreStep(inv_dt); // 碰撞 contact
             }
 
             for (int i = 0; i < joints.Count(); ++i)
             {
-                joints[i].PreStep(inv_dt);
+                joints[i].PreStep(inv_dt); // 关节 joint
             }
 
             // Perform iterations
@@ -68,16 +68,16 @@ namespace Case2D_lite {
             {
                 foreach (var arb in arbiters)
                 {
-                    arb.Value.ApplyImpulse();
+                    arb.Value.ApplyImpulse(); // 冲量
                 }
 
                 for (int j = 0; j < joints.Count(); ++j)
                 {
-                    joints[j].ApplyImpulse();
+                    joints[j].ApplyImpulse(); // 冲量
                 }
             }
 
-            // 更新速度
+            // 更新位置
             for (int i = 0; i < bodies.Count(); ++i)
             {
                 Body b = bodies[i];
@@ -101,7 +101,7 @@ namespace Case2D_lite {
                 {
                     Body bj = bodies[j];
 
-                    if (bi.invMass == 0.0f && bj.invMass == 0.0f)
+                    if (bi.invMass == 0.0f && bj.invMass == 0.0f) // 质量无限大
                         continue;
 
                     Arbiter newArb = new Arbiter(ref bi, ref bj);

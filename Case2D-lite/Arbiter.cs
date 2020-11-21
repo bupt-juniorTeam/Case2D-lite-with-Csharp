@@ -12,17 +12,17 @@ namespace Case2D_lite
     {
 		public struct Edges
 		{
-			public char inEdge1;
-			public char outEdge1;
-			public char inEdge2;
-			public char outEdge2;
+			public char inEdge1; // reference
+			public char outEdge1; // incident
+			public char inEdge2; // reference
+			public char outEdge2; // incident
 		};
 		public Edges e;
 		public int value;
 	};
 	public struct Contact
 	{
-		public Vector2f position;
+		public Vector2f position; // 碰撞点位置
 		public Vector2f normal; // 作用线(法线)方向向量
 		public Vector2f r1, r2;
 		public float separation;
@@ -43,9 +43,9 @@ namespace Case2D_lite
 	}
 	public class Arbiter
 	{
-		public const int MAX_POINTS = 2;
+		public const int MAX_POINTS = 2; // 接触点最大为2个
 
-		public Contact[] contacts = new Contact[MAX_POINTS];
+		public Contact[] contacts = new Contact[MAX_POINTS]; // 两个碰撞点的contact
 		public int numContacts;
 
 		Body body1;
@@ -55,22 +55,24 @@ namespace Case2D_lite
 
 		public Arbiter(ref Body b1, ref Body b2)
 		{
-			numContacts = Collition.Collide(contacts, body1, body2);
-			friction = (float)Math.Sqrt(body1.friction * body2.friction);
-
+			numContacts = Collition.Collide(contacts, body1, body2); // contact的个数
+			friction = (float)Math.Sqrt(body1.friction * body2.friction); // 摩擦力
 		}
 
+		// 更新contact
 		public void Update(ref Contact [] newContacts, int numNewContacts) 
 		{
+			// 合并后的contact
 			Contact []mergedContacts = new Contact[2];
 
 			for (int i = 0; i < numNewContacts; ++i)
-			{
+			{ // newcontact
 				Contact cNew = newContacts[i];
 				int k = -1;
 				for (int j = 0; j < numContacts; ++j)
-				{
+				{ // oldcontact
 					Contact cOld = contacts[j];
+					// 找到相同的contact
 					if (cNew.feature.value == cOld.feature.value)
 					{
 						k = j;
@@ -96,7 +98,7 @@ namespace Case2D_lite
 						c.Pnb = 0.0f;
 					}
 				}
-				else
+				else // 没有相同的就选取newcontact
 				{
 					mergedContacts[i] = newContacts[i];
 				}
