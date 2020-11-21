@@ -59,7 +59,9 @@ namespace Case2D_lite
 			friction = (float)Math.Sqrt(body1.friction * body2.friction); // 摩擦力
 		}
 
-		// 更新contact
+		/// <summary>
+		/// 更新contact
+		/// </summary>
 		public void Update(ref Contact [] newContacts, int numNewContacts) 
 		{
 			// 合并后的contact
@@ -109,7 +111,10 @@ namespace Case2D_lite
 
 			numContacts = numNewContacts;
 		}
-
+		
+		/// <summary>
+		/// 计算effective mass
+		/// </summary>
 		public void PreStep(float inv_dt) 
 		{
 			const float k_allowedPenetration = 0.01f;
@@ -158,6 +163,10 @@ namespace Case2D_lite
 				}
 			}
 		}
+
+		/// <summary>
+		/// 计算冲量，更新速度
+		/// </summary>
 		public void ApplyImpulse() 
 		{
 			Body b1 = body1;
@@ -170,6 +179,7 @@ namespace Case2D_lite
 				c.r1 = c.position - b1.position;
 				c.r2 = c.position - b2.position;
 
+				// ************************************* 法线冲量
 				// Relative velocity at contact
 				// 相对速度 v + w * r
 				Vector2f dv = b2.velocity + MyMath.Cross(b2.angularVelocity, c.r2) - b1.velocity - MyMath.Cross(b1.angularVelocity, c.r1);
@@ -201,6 +211,7 @@ namespace Case2D_lite
 				b2.velocity += b2.invMass * Pn;
 				b2.angularVelocity += b2.invI * MyMath.Cross(c.r2, Pn);
 
+				// ************************************* 切线冲量
 				// Relative velocity at contact
 				// 相对速度
 				dv = b2.velocity + MyMath.Cross(b2.angularVelocity, c.r2) - b1.velocity - MyMath.Cross(b1.angularVelocity, c.r1);
