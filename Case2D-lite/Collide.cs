@@ -33,8 +33,8 @@ namespace Case2D_lite {
         };
         public class ClipVertex {
             public ClipVertex() { fp.value = 0; }
-            public Vector2f v;
-            public FeaturePair fp;
+            public Vector2f v=new Vector2f();
+            public FeaturePair fp=new FeaturePair();
         };
         /// <summary>
         /// 
@@ -164,7 +164,7 @@ namespace Case2D_lite {
         /// <param name="bodyA"></param>
         /// <param name="bodyB"></param>
         /// <returns></returns>
-        public static int Collide(Contact[] contacts, Body bodyA, Body bodyB)
+        public static int Collide(ref Contact[] contacts, Body bodyA, Body bodyB)
         {
         // 初始化
             Vector2f hA = 0.5f * bodyA.width;
@@ -231,6 +231,9 @@ namespace Case2D_lite {
             Vector2f frontNormal = new Vector2f(), 
                 sideNormal = new Vector2f();
             ClipVertex[] incidentEdge = new ClipVertex[2];
+            incidentEdge[0] = new ClipVertex();
+            incidentEdge[1] = new ClipVertex();
+
             float front = 0.0f, negSide = 0.0f, posSide = 0.0f;
             char negEdge = (char)EdgeNumbers.NO_EDGE, posEdge = (char)EdgeNumbers.NO_EDGE;
             // 计算分离线和要分离的线段

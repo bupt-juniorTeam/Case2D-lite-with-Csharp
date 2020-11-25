@@ -7,19 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow"  Width="1080" Height="720">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="36*"/>
-            <ColumnDefinition Width="143*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Margin="0,0,0.333,659.667" Grid.RowSpan="2">
+        <StackPanel Grid.ColumnSpan="3"  Grid.RowSpan="2">
             <Button Margin="3" Padding="3" Click="cmdStart_Clicked">Start</Button>
             <Button Margin="3" Padding="3" Click="cmdStop_Clicked">Stop</Button>
         </StackPanel>
-        <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="Black" Grid.ColumnSpan="3" Margin="40,10,73.333,200.667"></Canvas>
+        <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="Black" Grid.ColumnSpan="3" ></Canvas>
     </Grid>
 </Window>

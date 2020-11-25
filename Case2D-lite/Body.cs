@@ -9,16 +9,16 @@ namespace Case2D_lite
 {
 	public class Body
 	{
-		public Vector2f position; // 位置(x,y)
+		public Vector2f position = new Vector2f(); // 位置(x,y)
 		public float rotation; // 旋转角度
 
-		public Vector2f velocity; // 速度(向量)
+		public Vector2f velocity = new Vector2f(); // 速度(向量)
 		public float angularVelocity; // 角速度
 
-		public Vector2f force; // 力(向量)
+		public Vector2f force = new Vector2f(); // 力(向量)
 		public float torque; // 力矩
 
-		public Vector2f width; // 长和宽 (w,h)
+		public Vector2f width = new Vector2f(); // 长和宽 (w,h)
 
 		public float friction; // 摩擦力
 		public float mass, invMass; // 质量 1/质量
@@ -26,6 +26,7 @@ namespace Case2D_lite
 
 		public Body()
 		{
+		
 			position.Set(0.0f, 0.0f);
 			rotation = 0.0f;
 			velocity.Set(0.0f, 0.0f);
