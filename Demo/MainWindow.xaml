@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"  Width="1080" Height="720">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked">Start</Button>
+            <Button Margin="3" Padding="3" Click="cmdStop_Clicked">Stop</Button>
+        </StackPanel>
+        <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="Black" Grid.ColumnSpan="3"></Canvas>
     </Grid>
 </Window>
