@@ -9,16 +9,17 @@ namespace Case2D_lite
 {
     public class Joint
     {
-       public Body body1;
-        public Body body2;
+       public Body body1=new Body();
+        public Body body2 = new Body();
         public float biasFactor;
         public float softness;
-        public Vector2f P; //累积冲量
-        public Vector2f bias;
-        public Vector2f r1, r2;
-        public Vector2f localAnchor1;
-        public Vector2f localAnchor2;
-        public Mat22 M;
+        public Vector2f P=new Vector2f(); //累积冲量
+        public Vector2f bias = new Vector2f();
+        public Vector2f r1 = new Vector2f();
+        public Vector2f r2=new Vector2f();
+        public Vector2f localAnchor1=new Vector2f();
+        public Vector2f localAnchor2= new Vector2f();
+        public Mat22 M=new Mat22();
 
         public Joint()
         {

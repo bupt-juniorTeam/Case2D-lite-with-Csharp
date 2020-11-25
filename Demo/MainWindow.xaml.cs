@@ -34,7 +34,9 @@ namespace Demo
                 BOX.Children.Clear();
                 numBodies = 0;
                 numJoints = 0;
-
+                lines.Clear();
+                rects.Clear();
+                world.Clear();
                 CompositionTarget.Rendering += Demo1;
                 rendering = true;
             }
@@ -47,12 +49,18 @@ namespace Demo
         private void StopRendering()
         {
             CompositionTarget.Rendering -= Demo1;
+            BOX.Children.Clear();
+            numBodies = 0;
+            numJoints = 0;
+            lines.Clear();
+            rects.Clear();
+            world.Clear();
             rendering = false;
         }
-        const float timeStep = 1.0f/60.0f;
+        const float timeStep = 1.0f / 60.0f;
         const int iterations = 10;
-        static Vector2f gravity = new Vector2f(0.0f,-10.0f);
-        
+        static Vector2f gravity = new Vector2f(0.0f, -10.0f);
+
         int numBodies = 0;
         int numJoints = 0;
 
@@ -61,18 +69,64 @@ namespace Demo
         const int width = 960;
         const int height = 480;
         World world = new World(gravity, iterations);
+        List<Rectangle> rects = new List<Rectangle>();
+        List<Line> lines = new List<Line>();
+
         private void Demo1(object sender, EventArgs e)
         {
-            Body b1 = new Body();
-            b1.Set(new Vector2f(100f, 20f), float.MaxValue);
-            b1.position.Set(0.0f, -0.5f * b1.width.y);
-            Body b2 = new Body();
-            b2.Set(new Vector2f(1f, 1f), 200f);
+            if (numBodies == 0)
+            {
+                Body b1 = new Body();
+                b1.Set(new Vector2f(960f, 20f), float.MaxValue);
+                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                ++numBodies;
+                world.Add(b1);
+                Rectangle rect1 = new Rectangle();
+                rects.Add(rect1);
+                
+
+                Body b2 = new Body();
+                b2.Set(new Vector2f(10f, 10f), 200f);
+                b2.position.Set(0.0f, 10f);
+                ++numBodies;
+                world.Add(b2);
+                Rectangle rect2 = new Rectangle();
+                rects.Add(rect2);
+                BOX.Children.Add(rect1);
+                BOX.Children.Add(rect2);
+                
+            }
+            else
+            {
+                Step();
+            }
         }
 
-        private void DrawBody(ref Body body,ref Rectangle rect)
+        private void Step()
+        {
+            world.Step(timeStep);
+            for (int i = 0; i < numBodies; ++i)
+            {
+                DrawBody(world.bodies[i], rects[i]);
+            }
+            for (int i = 0; i < numJoints; ++i)
+            {
+
+                DrawJoint(world.joints[i], lines[i], lines[i+1]);
+            }
+        }
+
+        private void DrawBody(Body body, Rectangle rect)
         {
             Mat22 R = new Mat22(body.rotation);
+            Vector2f x = body.position;
+            Vector2f h = 0.5f * body.width;
+
+            Vector2f v1 = x + R * new Vector2f(-h.x, -h.y);
+            Vector2f v2 = x + R * new Vector2f(h.x, -h.y);
+            Vector2f v3 = x + R * new Vector2f(h.x, h.y);
+            Vector2f v4 = x + R * new Vector2f(-h.x, h.y);
+            
             Vector2f pos = body.position;
 
             rect.Fill = System.Windows.Media.Brushes.Red;
@@ -81,11 +135,11 @@ namespace Demo
             rect.Width = body.width.x;
             rect.Height = body.width.y;
 
-            Canvas.SetLeft(rect, BOX.ActualWidth / 2+pos.x);
-            Canvas.SetBottom(rect, pos.y);
+            Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
+            Canvas.SetBottom(rect, pos.y-rect.Height/2);
         }
 
-        private void DrawJoint(ref Joint joint,ref Line l1,ref Line l2)
+        private void DrawJoint(Joint joint, Line l1, Line l2)
         {
             Body b1 = joint.body1;
             Body b2 = joint.body2;
@@ -109,7 +163,7 @@ namespace Demo
             l1.X2 = p2.x;
             l1.Y2 = p2.y;
 
-            l1.Stroke= System.Windows.Media.Brushes.Blue;
+            l1.Stroke = System.Windows.Media.Brushes.Blue;
 
             l2.Stroke = System.Windows.Media.Brushes.Blue;
 

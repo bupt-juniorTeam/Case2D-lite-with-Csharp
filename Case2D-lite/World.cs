@@ -17,8 +17,13 @@ namespace Case2D_lite {
         public static bool positionCorrection = true;
         public World(Vector2f gravity,int iterations)
         {
+            this.gravity = new Vector2f();
+            this.bodies = new List<Body>();
+            this.joints = new List<Joint>();
+            this.arbiters = new Dictionary<ArbiterKey, Arbiter>();
             this.gravity = gravity; // 重力加速度(0,-9.8)
             this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations
+            
         }
         public void Add(Body body)
         {

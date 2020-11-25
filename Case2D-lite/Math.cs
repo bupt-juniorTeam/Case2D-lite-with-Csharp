@@ -306,7 +306,8 @@ namespace Case2D.Common
     public class Mat22
     {
         //两个列向量
-        public Vector2f ex, ey;
+        public Vector2f ex = new Vector2f();
+        public Vector2f ey=new Vector2f();
 
         public Mat22() { }
         public Mat22(float angle)

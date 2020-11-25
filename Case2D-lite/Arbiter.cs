@@ -8,30 +8,30 @@ using Case2D_lite;
 
 namespace Case2D_lite
 {
-	public struct FeaturePair
+	public class FeaturePair
     {
-		public struct Edges
+		public class Edges
 		{
 			public char inEdge1; // reference
 			public char outEdge1; // incident
 			public char inEdge2; // reference
 			public char outEdge2; // incident
 		};
-		public Edges e;
+		public Edges e=new Edges();
 		public int value;
 	};
-	public struct Contact
+	public class Contact
 	{
-		public Vector2f position; // 碰撞点位置
-		public Vector2f normal; // 作用线(法线)方向向量
-		public Vector2f r1, r2;
+		public Vector2f position = new Vector2f(); // 碰撞点位置
+		public Vector2f normal = new Vector2f(); // 作用线(法线)方向向量
+		public Vector2f r1 = new Vector2f(), r2 = new Vector2f();
 		public float separation;
 		public float Pn;   // 作用线(法线)方向冲量
 		public float Pt;   // 切线方向冲量
 		public float Pnb;  // accumulated normal impulse for position bias
 		public float massNormal, massTangent; // 质量 力矩
 		public float bias;
-		public FeaturePair feature;
+		public FeaturePair feature=new FeaturePair();
 	}
 	public struct ArbiterKey
 	{
@@ -48,15 +48,19 @@ namespace Case2D_lite
 		public Contact[] contacts = new Contact[MAX_POINTS]; // 两个碰撞点的contact
 		public int numContacts;
 
-		Body body1;
-		Body body2;
+		Body body1=new Body();
+		Body body2= new Body();
 
 		float friction;
 
 		public Arbiter(ref Body b1, ref Body b2)
 		{
-			numContacts = Collision.Collide(contacts, body1, body2); // contact的个数
-			friction = (float)Math.Sqrt(body1.friction * body2.friction); // 摩擦力
+			contacts[0] = new Contact();
+			contacts[1] = new Contact();
+			numContacts = Collision.Collide(ref contacts, b1, b2); // contact的个数
+			friction = (float)Math.Sqrt(b1.friction * b2.friction); // 摩擦力
+			
+
 		}
 
 		/// <summary>
@@ -66,6 +70,8 @@ namespace Case2D_lite
 		{
 			// 合并后的contact
 			Contact []mergedContacts = new Contact[2];
+			mergedContacts[0] = new Contact();
+			mergedContacts[1] = new Contact();
 
 			for (int i = 0; i < numNewContacts; ++i)
 			{ // newcontact
