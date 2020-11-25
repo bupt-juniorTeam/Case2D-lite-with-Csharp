@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 using Case2D.Common;
 namespace Case2D_lite {
-    class World {
+    public class World {
         public int iterations; // 迭代速度
         public Vector2f gravity; // 重力加速度
         public List<Body> bodies; // 物体
@@ -15,7 +15,7 @@ namespace Case2D_lite {
         public static bool accumulateImpulses = true;
         public static bool warmStarting = true;
         public static bool positionCorrection = true;
-        World(Vector2f gravity,int iterations)
+        public World(Vector2f gravity,int iterations)
         {
             this.gravity = gravity; // 重力加速度(0,-9.8)
             this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations

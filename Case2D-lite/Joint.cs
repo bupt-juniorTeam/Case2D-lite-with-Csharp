@@ -7,7 +7,7 @@ using Case2D.Common;
 
 namespace Case2D_lite
 {
-    class Joint
+    public class Joint
     {
         Body body1;
         Body body2;

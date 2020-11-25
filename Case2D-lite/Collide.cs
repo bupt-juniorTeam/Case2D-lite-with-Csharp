@@ -190,7 +190,7 @@ namespace Case2D_lite {
             Vector2f faceA = MyMath.Abs(dA) - hA - absC * hB;
             if (faceA.x > 0.0f || faceA.y > 0.0f)
                 return 0;
-            // Box B faces
+            // Box B facesa
             Vector2f faceB = MyMath.Abs(dB) - hB - absC * hA;
             if (faceB.x > 0.0f || faceB.y > 0.0f)
                 return 0;
