@@ -48,8 +48,8 @@ namespace Case2D_lite
 		public Contact[] contacts = new Contact[MAX_POINTS]; // 两个碰撞点的contact
 		public int numContacts;
 
-		Body body1=new Body();
-		Body body2= new Body();
+		Body body1;
+		Body body2;
 
 		float friction;
 
@@ -59,7 +59,8 @@ namespace Case2D_lite
 			contacts[1] = new Contact();
 			numContacts = Collision.Collide(ref contacts, b1, b2); // contact的个数
 			friction = (float)Math.Sqrt(b1.friction * b2.friction); // 摩擦力
-			
+			body1 = b1;
+			body2 = b2;
 
 		}
 

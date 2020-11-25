@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Case2D_lite;
 using Case2D.Common;
+using System.Diagnostics;
+
 namespace Demo
 {
     /// <summary>
@@ -57,7 +59,7 @@ namespace Demo
             world.Clear();
             rendering = false;
         }
-        const float timeStep = 1.0f / 60.0f;
+        const float timeStep = 1.0f/60.0f;
         const int iterations = 10;
         static Vector2f gravity = new Vector2f(0.0f, -10.0f);
 
@@ -86,8 +88,8 @@ namespace Demo
                 
 
                 Body b2 = new Body();
-                b2.Set(new Vector2f(10f, 10f), 200f);
-                b2.position.Set(0.0f, 10f);
+                b2.Set(new Vector2f(20f, 20f), 200f);
+                b2.position.Set(0.0f, 20f);
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
@@ -102,9 +104,21 @@ namespace Demo
             }
         }
 
+        List<Ellipse> ellipses = new List<Ellipse>();
         private void Step()
         {
             world.Step(timeStep);
+            ellipses.Clear();
+            int count = 0;
+            foreach (var dic in world.arbiters)
+            {
+                Arbiter arbiter = dic.Value;
+                for (int i = 0; i < arbiter.numContacts; ++i)
+                {
+                    count++;
+                }
+            }
+            Console.WriteLine(count);
             for (int i = 0; i < numBodies; ++i)
             {
                 DrawBody(world.bodies[i], rects[i]);
@@ -129,14 +143,14 @@ namespace Demo
             
             Vector2f pos = body.position;
 
-            rect.Fill = System.Windows.Media.Brushes.Red;
-            rect.Stroke = System.Windows.Media.Brushes.Gray;
+            rect.Stroke = System.Windows.Media.Brushes.White;
 
             rect.Width = body.width.x;
             rect.Height = body.width.y;
 
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
+            
         }
 
         private void DrawJoint(Joint joint, Line l1, Line l2)
