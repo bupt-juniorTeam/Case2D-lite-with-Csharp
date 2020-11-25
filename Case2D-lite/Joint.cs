@@ -9,16 +9,16 @@ namespace Case2D_lite
 {
     public class Joint
     {
-        Body body1;
-        Body body2;
-        float biasFactor;
-        float softness;
-        Vector2f P; //累积冲量
-        Vector2f bias;
-        Vector2f r1, r2;
-        Vector2f localAnchor1;
-        Vector2f localAnchor2;
-        Mat22 M;
+       public Body body1;
+        public Body body2;
+        public float biasFactor;
+        public float softness;
+        public Vector2f P; //累积冲量
+        public Vector2f bias;
+        public Vector2f r1, r2;
+        public Vector2f localAnchor1;
+        public Vector2f localAnchor2;
+        public Mat22 M;
 
         public Joint()
         {
@@ -43,7 +43,7 @@ namespace Case2D_lite
             Mat22 Rot1T = Rot1.Transpose();
             Mat22 Rot2T = Rot2.Transpose();
 
-            localAnchor1 = Rot1T * (anchor - body1.position);
+            localAnchor1 = Rot1T * (anchor - body1.position);   //个人理解，先反向旋转，绘制时再反向旋转以抵消
             localAnchor2 = Rot2T * (anchor - body2.position);
 
             P.Set(0.0f, 0.0f);
