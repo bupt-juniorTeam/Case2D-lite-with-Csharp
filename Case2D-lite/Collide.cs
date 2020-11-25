@@ -191,7 +191,7 @@ namespace Case2D_lite {
             if (faceA.x > 0.0f || faceA.y > 0.0f)
                 return 0;
             // Box B facesa
-            Vector2f faceB = MyMath.Abs(dB) - hB - absC * hA;
+            Vector2f faceB = MyMath.Abs(dB) - hB - absCT * hA;
             if (faceB.x > 0.0f || faceB.y > 0.0f)
                 return 0;
         // 找到最佳碰撞轴
@@ -296,7 +296,11 @@ namespace Case2D_lite {
             }
             // 分离其他面
             ClipVertex[] clipPoints1 = new ClipVertex[2];
+            clipPoints1[0] = new ClipVertex();
+            clipPoints1[1] = new ClipVertex();
             ClipVertex[] clipPoints2 = new ClipVertex[2];
+            clipPoints2[0] = new ClipVertex();
+            clipPoints2[1] = new ClipVertex();
             int np;
 
             // Clip to box side 1
