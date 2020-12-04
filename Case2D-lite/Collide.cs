@@ -94,7 +94,7 @@ namespace Case2D_lite {
             return numOut;
         }
         /// <summary>
-        /// 计算射入边
+        /// 计算候选点6
         /// </summary>
         /// <param name="c">两个碰撞点</param>
         /// <param name="h"></param>
@@ -168,8 +168,8 @@ namespace Case2D_lite {
         {
         // 初始化
             Vector2f hA = 0.5f * bodyA.width;
-
             Vector2f hB = 0.5f * bodyB.width;
+
             Vector2f posA = bodyA.position;
             Vector2f posB = bodyB.position;
 
@@ -186,26 +186,35 @@ namespace Case2D_lite {
             Mat22 absC = MyMath.Abs(C);
             Mat22 absCT = absC.Transpose();
 
+            //dA是两个矩形终点连线的向量，做了Abs运算后，dA表示的只是数值意义。
+            //实际上，下面的代码是Abs(dA) - (hA + absC * hB)
+            //hA就是矩形A右上角的点，absC * hB就是求出B点在A矩形的局部坐标系下的四个顶点中
+            //x,y方向上的最大值，因为dA，hA,hB都是从(0,0)点出发的向量，所以向量中的数值仅仅
+            //表示数值意义
+            //Abs(dA) - (hA + absC * hB)对于这个式子，如果只看x轴
+            //实际上就是dA的x坐标表示两个矩形的中心连线在x轴投影长度为s，
+            //hA是矩形A的x方向在中心连线的最大投影长度a,absC*hB就是矩形B的x方向在中心连线的最大投影长度b
+            //如果s-a-b大于0，这说明投影不相交。
             // Box A faces
             Vector2f faceA = MyMath.Abs(dA) - hA - absC * hB;
             if (faceA.x > 0.0f || faceA.y > 0.0f)
                 return 0;
             // Box B facesa
-            Vector2f faceB = MyMath.Abs(dB) - hB - absCT * hA;
+            Vector2f faceB = MyMath.Abs(dB)  - absCT * hA - hB;
             if (faceB.x > 0.0f || faceB.y > 0.0f)
                 return 0;
         // 找到最佳碰撞轴
             Axis axis;
             float separation;
-            Vector2f normal;
+  
 
             // Box A faces
             axis = Axis.FACE_A_X;
             separation = faceA.x;
-            normal = dA.x > 0.0f ? RotA.ex : -RotA.ex;
+            Vector2f normal = dA.x > 0.0f ? RotA.ex : -RotA.ex;
 
             const float relativeTol = 0.95f;
-            const float absoluteTol = 0.01f;
+            const float absoluteTol = 0.05f;
 
             if (faceA.y > relativeTol * separation + absoluteTol * hA.y)
             {
@@ -227,9 +236,9 @@ namespace Case2D_lite {
                 separation = faceB.y;
                 normal = dB.y > 0.0f ? RotB.ey : -RotB.ey;
             }
-        // 根据分离轴初始化分离平面
-            Vector2f frontNormal = new Vector2f(), 
-                sideNormal = new Vector2f();
+            // 根据分离轴初始化分离平面
+            Vector2f frontNormal = new Vector2f();
+            Vector2f sideNormal = new Vector2f();
             ClipVertex[] incidentEdge = new ClipVertex[2];
             incidentEdge[0] = new ClipVertex();
             incidentEdge[1] = new ClipVertex();
@@ -335,7 +344,14 @@ namespace Case2D_lite {
                     ++numContacts;
                 }
             }
-
+            Console.WriteLine("normal");
+            Console.WriteLine(normal);
+          /*  Console.WriteLine("RotA");
+            Console.WriteLine(RotA.ex);
+            Console.WriteLine(RotA.ey);
+            Console.WriteLine("RotB");
+            Console.WriteLine(RotB.ex);
+            Console.WriteLine(RotB.ey);*/
             return numContacts;
         }
     }

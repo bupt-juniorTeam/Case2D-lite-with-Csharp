@@ -118,7 +118,7 @@ namespace Demo
                     count++;
                 }
             }
-            Console.WriteLine(count);
+           /* Console.WriteLine(count);*/
             for (int i = 0; i < numBodies; ++i)
             {
                 DrawBody(world.bodies[i], rects[i]);
@@ -143,7 +143,7 @@ namespace Demo
             
             Vector2f pos = body.position;
 
-            rect.Stroke = System.Windows.Media.Brushes.White;
+            rect.Stroke = System.Windows.Media.Brushes.Yellow;
 
             rect.Width = body.width.x;
             rect.Height = body.width.y;
