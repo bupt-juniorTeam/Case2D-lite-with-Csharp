@@ -27,6 +27,7 @@ namespace Demo
         {
             InitializeComponent();
         }
+
         private bool rendering = false;
 
         private void cmdStart_Clicked(object sender, RoutedEventArgs e)
@@ -59,9 +60,11 @@ namespace Demo
             world.Clear();
             rendering = false;
         }
+
         const float timeStep = 1.0f/60.0f;
         const int iterations = 10;
         static Vector2f gravity = new Vector2f(0.0f, -10.0f);
+        static int times = 0;
 
         int numBodies = 0;
         int numJoints = 0;
@@ -88,44 +91,47 @@ namespace Demo
                 
 
                 Body b2 = new Body();
-                b2.Set(new Vector2f(20f, 20f), 200f);
-                b2.position.Set(0.0f, 20f);
+                b2.Set(new Vector2f(20f, 20f), 10f);
+                b2.position.Set(0.0f, 300f);
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
                 rects.Add(rect2);
                 BOX.Children.Add(rect1);
-                BOX.Children.Add(rect2);
-                
+                BOX.Children.Add(rect2);     
             }
             else
             {
                 Step();
+                times++;
             }
         }
 
         List<Ellipse> ellipses = new List<Ellipse>();
         private void Step()
         {
+            // test
+            // 调用次数
+            System.Console.WriteLine("**********************************times: " + times + ": ");
+
             world.Step(timeStep);
             ellipses.Clear();
-            int count = 0;
-            foreach (var dic in world.arbiters)
-            {
-                Arbiter arbiter = dic.Value;
-                for (int i = 0; i < arbiter.numContacts; ++i)
-                {
-                    count++;
-                }
-            }
-            Console.WriteLine(count);
+            //int count = 0;
+            //foreach (var dic in world.arbiters)
+            //{
+            //    Arbiter arbiter = dic.Value;
+            //    for (int i = 0; i < arbiter.numContacts; ++i)
+            //    {
+            //        count++;
+            //    }
+            //}
+            // Console.WriteLine(count);
             for (int i = 0; i < numBodies; ++i)
             {
                 DrawBody(world.bodies[i], rects[i]);
             }
             for (int i = 0; i < numJoints; ++i)
             {
-
                 DrawJoint(world.joints[i], lines[i], lines[i+1]);
             }
         }
@@ -180,8 +186,6 @@ namespace Demo
             l1.Stroke = System.Windows.Media.Brushes.Blue;
 
             l2.Stroke = System.Windows.Media.Brushes.Blue;
-
-
         }
     }
 }
