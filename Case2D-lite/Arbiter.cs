@@ -53,6 +53,16 @@ namespace Case2D_lite
 
 		float friction;
 
+		public Body Body1
+        {
+			get;
+        }
+
+		public Body Body2
+        {
+			get;
+        }
+
 		public Arbiter(ref Body b1, ref Body b2)
 		{
 			contacts[0] = new Contact();
@@ -79,7 +89,8 @@ namespace Case2D_lite
 				Contact cNew = newContacts[i];
 				int k = -1;
 				for (int j = 0; j < numContacts; ++j)
-				{ // oldcontact
+				{
+					// oldcontact
 					Contact cOld = contacts[j];
 					// 找到相同的contact
 					if (cNew.feature.value == cOld.feature.value)
@@ -89,11 +100,11 @@ namespace Case2D_lite
 					}
 				}
 
+				mergedContacts[i] = cNew;
 				if (k > -1)
 				{
 					Contact c = mergedContacts[i];
 					Contact cOld = contacts[k];
-					c = cNew;
 					if (World.warmStarting)
 					{
 						c.Pn = cOld.Pn;
@@ -106,10 +117,6 @@ namespace Case2D_lite
 						c.Pt = 0.0f;
 						c.Pnb = 0.0f;
 					}
-				}
-				else // 没有相同的就选取newcontact
-				{
-					mergedContacts[i] = newContacts[i];
 				}
 			}
 
@@ -138,7 +145,7 @@ namespace Case2D_lite
 				// Precompute normal mass, tangent mass, and bias.
 				float rn1 = MyMath.Dot(r1, c.normal); // r1 x n
 				float rn2 = MyMath.Dot(r2, c.normal); // r2 x n
-												// 1/m1 + 1/m2
+				// 1/m1 + 1/m2
 				float kNormal = body1.invMass + body2.invMass;
 				// 1 / m_n = 1/m1 + 1/m2 + 1/I1 * (r1 • r1 - rn1 * rn1) + 1/I2 * (r2 • r2 - rn2 * rn2)
 				kNormal += body1.invI * (MyMath.Dot(r1, r1) - rn1 * rn1) + body2.invI * (MyMath.Dot(r2, r2) - rn2 * rn2);
@@ -208,7 +215,6 @@ namespace Case2D_lite
 				{
 					dPn = Math.Max(dPn, 0.0f);
 				}
-
 				// Apply contact impulse
 				Vector2f Pn = dPn * c.normal;
 
