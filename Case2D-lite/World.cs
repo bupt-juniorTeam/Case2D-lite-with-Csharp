@@ -13,7 +13,7 @@ namespace Case2D_lite {
         public List<Joint> joints; // 关节
         public Dictionary<ArbiterKey, Arbiter> arbiters; // 碰撞
         public static bool accumulateImpulses = true;
-        public static bool warmStarting = false;
+        public static bool warmStarting = true;
         public static bool positionCorrection = true;
         public World(Vector2f gravity,int iterations)
         {

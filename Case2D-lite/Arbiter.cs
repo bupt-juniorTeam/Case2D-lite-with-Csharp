@@ -100,24 +100,30 @@ namespace Case2D_lite
 					}
 				}
 
-				mergedContacts[i] = cNew;
+				
 				if (k > -1)
 				{
-					Contact c = mergedContacts[i];
 					Contact cOld = contacts[k];
+					mergedContacts[i] = cNew;
 					if (World.warmStarting)
 					{
-						c.Pn = cOld.Pn;
-						c.Pt = cOld.Pt;
-						c.Pnb = cOld.Pnb;
+						mergedContacts[i].Pn = cOld.Pn;
+						mergedContacts[i].Pt = cOld.Pt;
+						mergedContacts[i].Pnb = cOld.Pnb;
 					}
 					else
 					{
-						c.Pn = 0.0f;
-						c.Pt = 0.0f;
-						c.Pnb = 0.0f;
+						mergedContacts[i].Pn = 0.0f;
+						mergedContacts[i].Pt = 0.0f;
+						mergedContacts[i].Pnb = 0.0f;
 					}
+                }
+                else
+                {
+					mergedContacts[i] = cNew;
 				}
+                
+				
 			}
 
 			for (int i = 0; i < numNewContacts; ++i)
