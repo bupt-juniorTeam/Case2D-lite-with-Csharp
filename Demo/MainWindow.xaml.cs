@@ -82,8 +82,9 @@ namespace Demo
             if (numBodies == 0)
             {
                 Body b1 = new Body();
-                b1.Set(new Vector2f(960f, 20f), float.MaxValue);
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.Set(new Vector2f(1000f, 20f), float.MaxValue);
+                b1.position.Set(0.0f, -0.5f * b1.width.y+10);
+                b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
                 Rectangle rect1 = new Rectangle();
@@ -91,14 +92,27 @@ namespace Demo
                 
 
                 Body b2 = new Body();
-                b2.Set(new Vector2f(20f, 20f), 10f);
-                b2.position.Set(0.0f, 300f);
+                b2.Set(new Vector2f(100f, 20f), float.MaxValue);
+                b2.position.Set(0.0f, 20f);
+                b2.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
                 rects.Add(rect2);
+
+
+                Body b3 = new Body();
+                b3.Set(new Vector2f(20f, 20f), 20f);
+                b3.position.Set(50f, 100f);
+                b3.rotation = 0.0f;
+                ++numBodies;
+                world.Add(b3);
+                Rectangle rect3 = new Rectangle();
+                rects.Add(rect3);
+
                 BOX.Children.Add(rect1);
-                BOX.Children.Add(rect2);     
+                BOX.Children.Add(rect2);
+                BOX.Children.Add(rect3);
             }
             else
             {
@@ -151,14 +165,15 @@ namespace Demo
             
             Vector2f pos = body.position;
 
-            rect.Stroke = System.Windows.Media.Brushes.Yellow;
+            rect.Stroke = System.Windows.Media.Brushes.White;
 
             rect.Width = body.width.x;
             rect.Height = body.width.y;
-
+            
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
-            
+            RotateTransform rotate = new RotateTransform(-body.rotation*90,rect.Width/2,rect.Height/2);
+            rect.RenderTransform = rotate;
         }
 
         private void DrawJoint(Joint joint, Line l1, Line l2)
