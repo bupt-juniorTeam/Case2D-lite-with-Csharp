@@ -307,11 +307,17 @@ namespace Case2D.Common
     {
         //两个列向量
         public Vector2f ex = new Vector2f();
-        public Vector2f ey=new Vector2f();
+        public Vector2f ey = new Vector2f();
 
-        public Mat22() { }
+        public Mat22()
+        {
+            ex = new Vector2f();
+            ey = new Vector2f();
+        }
         public Mat22(float angle)
         {
+            ex = new Vector2f();
+            ey = new Vector2f();
             float c = (float)Math.Cos(angle);
             float s = (float)Math.Sin(angle);
             ex.x = c;
@@ -319,10 +325,10 @@ namespace Case2D.Common
             ex.y = s;
             ey.y = c;
         }
-        
+
         public Mat22 Transpose()
         {
-            return new Mat22(ex.x, ex.y, ey.x, ey.y);
+            return new Mat22(new Vector2f(ex.x,ey.x),new Vector2f(ex.y,ey.y));
         }
         /**************************************************************************
         * 功能描述：使用列向量构造这个矩阵
@@ -422,7 +428,7 @@ namespace Case2D.Common
             x.y = det * (a11 * b.y - a21 * b.x);
             return x;
         }
-        
+
 
         /**************************************************************************
        * 功能描述： 计算两个2X2矩阵相加
@@ -436,12 +442,12 @@ namespace Case2D.Common
         }
 
         //矩阵和向量相乘
-        public static Vector2f operator*(Mat22 A,Vector2f v)
+        public static Vector2f operator *(Mat22 A, Vector2f v)
         {
             return new Vector2f(A.ex.x * v.x + A.ey.x * v.y, A.ex.y * v.x + A.ey.y * v.y);
         }
 
-        public static Mat22 operator*(Mat22 A,Mat22 B)
+        public static Mat22 operator *(Mat22 A, Mat22 B)
         {
             return new Mat22(A * B.ex, A * B.ey);
         }
@@ -1008,9 +1014,9 @@ namespace Case2D.Common
         }
         public static Mat22 Abs(Mat22 A)
         {
-	        return new Mat22(Abs(A.ex), Abs(A.ey));
+            return new Mat22(Abs(A.ex), Abs(A.ey));
         }
-    public static float Clamp(float a, float low, float high)
+        public static float Clamp(float a, float low, float high)
         {
             return Math.Max(low, Math.Min(a, high));
         }
