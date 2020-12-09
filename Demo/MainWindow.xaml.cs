@@ -852,7 +852,7 @@ namespace Demo
         }
         private Vector2f transf(Vector2f p)
         {
-            return new Vector2f(p.x + 480, -p.y);
+            return new Vector2f(p.x+480 , -p.y+480);
        
         }
         private void DrawJoint(Joint joint, Line l1, Line l2)
@@ -869,11 +869,15 @@ namespace Demo
             Vector2f x2 = b2.position;
             Vector2f p2 = x2 + R2 * joint.localAnchor2;
 
-            x1 = transf(x1*multiple);
-            p1 = transf(p1*multiple);
-            x2 = transf(x2*multiple);
-            p2 = transf(p2*multiple);
-
+            x1 = transf(x1 * multiple);
+            p1 = transf(p1 * multiple);
+            x2 = transf(x2 * multiple);
+            p2 = transf(p2 * multiple);
+/*            x1 *= multiple;
+            x2 *= multiple;
+            p1 *= multiple;
+            p2 *= multiple;
+*/
             l1.X1 = p1.x;
             l1.Y1 = p1.y;
             l1.X2 = x1.x;
@@ -885,17 +889,17 @@ namespace Demo
             l2.Y2 = x2.y;
 
             l1.Stroke = System.Windows.Media.Brushes.White;
-            l2.Stroke = System.Windows.Media.Brushes.Blue;
+            l2.Stroke = System.Windows.Media.Brushes.White;
             /* l1.HorizontalAlignment = HorizontalAlignment.Left;
              l1.VerticalAlignment = VerticalAlignment.Center;
 
              l2.HorizontalAlignment = HorizontalAlignment.Left;
              l2.VerticalAlignment = VerticalAlignment.Center;*/
 
-            Canvas.SetLeft(l1, 0);
-            Canvas.SetBottom(l1, 0);
-            Canvas.SetLeft(l2, 0);
-            Canvas.SetBottom(l2, 0);
+            /*Canvas.SetLeft(l1, BOX.Width / 2);
+           
+            Canvas.SetLeft(l2, BOX.Width / 2);
+           */
 
 
         }
