@@ -15,6 +15,7 @@ namespace Case2D_lite {
         public static bool accumulateImpulses = true;
         public static bool warmStarting = false;
         public static bool positionCorrection = true;
+        private Test test;
         public World(Vector2f gravity,int iterations)
         {
             this.gravity = new Vector2f();
@@ -23,6 +24,7 @@ namespace Case2D_lite {
             this.arbiters = new Dictionary<ArbiterKey, Arbiter>();
             this.gravity = gravity; // 重力加速度(0,-9.8)
             this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations
+            this.test = new Test();
             
         }
         public void Add(Body body)
@@ -89,7 +91,7 @@ namespace Case2D_lite {
                     joints[j].ApplyImpulse(); // 冲量
                 }
             }
-
+            test.printBody(ref bodies);
             // 更新位置
             for (int i = 0; i < bodies.Count(); ++i)
             {

@@ -15,8 +15,8 @@ namespace Case2D_lite
                 System.Console.Write("Body: " + b.mass + " ");
                 System.Console.Write("pos: " + b.position + " ");
                 System.Console.Write("rot: " + b.rotation + " ");
-                System.Console.Write("v: " + b.velocity + " ");
-                System.Console.Write("w: " + b.angularVelocity + " ");
+                //System.Console.Write("v: " + b.velocity + " ");
+                //System.Console.Write("w: " + b.angularVelocity + " ");
                 System.Console.WriteLine();
             }
         }
