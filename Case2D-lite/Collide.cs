@@ -344,8 +344,8 @@ namespace Case2D_lite {
                     ++numContacts;
                 }
             }
-            Console.WriteLine("normal");
-            Console.WriteLine(normal);
+            //Console.WriteLine("normal");
+            //Console.WriteLine(normal);
           /*  Console.WriteLine("RotA");
             Console.WriteLine(RotA.ex);
             Console.WriteLine(RotA.ey);

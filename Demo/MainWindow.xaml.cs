@@ -255,8 +255,6 @@ namespace Demo
                 times++;
             }
         }
-
-
         private void Demo2(object sender, EventArgs e)
         {
             if (numBodies == 0 && numJoints == 0)
@@ -308,7 +306,66 @@ namespace Demo
         }
         private void Demo3(object sender, EventArgs e) {
             if (numBodies == 0 && numJoints == 0) {
+                Body b;
+                Rectangle rect;
 
+                b = new Body();
+                b.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
+                b.position.Set(0.0f, -0.5f * b.width.y);
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                b = new Body();
+                b.Set(new Vector2f(13.0f, 0.25f), float.MaxValue);
+                b.position.Set(-2.0f, 11.0f);
+                b.rotation = -0.25f;
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                b = new Body();
+                b.Set(new Vector2f(0.25f, 1.0f), float.MaxValue);
+                b.position.Set(5.25f, 9.5f);
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                b = new Body();
+                b.Set(new Vector2f(13.0f, 0.25f), float.MaxValue);
+                b.position.Set(2.0f, 7.0f);
+                b.rotation = 0.25f;
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                b = new Body();
+                b.Set(new Vector2f(0.25f, 1.0f), float.MaxValue);
+                b.position.Set(-5.25f, 5.5f);
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                b = new Body();
+                b.Set(new Vector2f(13.0f, 0.25f), float.MaxValue);
+                b.position.Set(-2.0f, 3.0f);
+                b.rotation = -0.25f;
+                world.Add(b); ++numBodies;
+                rect = new Rectangle();
+                rects.Add(rect); BOX.Children.Add(rect);
+
+                float[] friction = {0.75f,0.5f,0.35f,0.1f,0.0f};
+                Body[] B = new Body[5];
+                for (int i=0; i<5; i++) {
+                    B[i] = new Body();
+                    b = B[i];
+                    b.Set(new Vector2f(0.5f,0.5f), 25.0f);
+                    b.friction = friction[i];
+                    b.position.Set(-7.5f + 2.0f*i,14.0f);
+                    world.Add(b); ++numBodies;
+                    rect = new Rectangle();
+                    rects.Add(rect); BOX.Children.Add(rect);
+                }
             }
             else
             {
@@ -466,7 +523,80 @@ namespace Demo
         {
             if (numBodies == 0 && numJoints == 0)
             {
+                Body b1 = new Body();
+                b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
+                b1.friction = 0.2f;
+                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.rotation = 0.0f;
+                world.Add(b1); ++numBodies;
+                Rectangle rect1 = new Rectangle();
+                rects.Add(rect1); BOX.Children.Add(rect1);
 
+                const int numPlanks = 15;
+                float mass = 50.0f;
+
+                // 调谐
+                float frequencyHz = 4.0f;  //频率hz
+                float dampingRatio = 0.7f; //阻尼率
+
+                // 频率（弧度单位）
+                float omega = 2.0f * (float)Math.PI * frequencyHz;
+
+                // 阻尼系数
+                float d = 2.0f * mass * dampingRatio * omega;
+
+                // 弹簧刚度
+                float k = mass * omega * omega;
+
+                // 神奇公式
+                float softness = 1.0f / (d + timeStep * k);
+                float biasFactor = timeStep * k / (d + timeStep * k);
+
+                Body[] B = new Body[numPlanks];
+                Joint[] J = new Joint[numPlanks + 1];
+
+                Body b2 = b1;
+                Body b3 = new Body();
+                for (int i = 0; i < numPlanks; i++) {
+                    B[i] = new Body();
+                    Body b = B[i];
+                    b.Set(new Vector2f(1.0f,0.25f),mass);
+                    b.friction = 0.2f;
+                    b.position.Set(-8.5f + 1.25f*i, 5.0f);
+                    world.Add(b); ++numBodies;
+                    Rectangle temp = new Rectangle();
+                    rects.Add(temp); BOX.Children.Add(temp);
+
+                    b3 = b;
+                    J[i] = new Joint();
+                    Joint j = J[i];
+                    j.Set(b2, b3, new Vector2f(-9.125f + 1.25f * i, 5.0f));
+                    j.softness = softness;
+                    j.biasFactor = biasFactor;
+                    world.Add(j); ++numJoints;
+                    Line l1 = new Line();
+                    Line l2 = new Line();
+                    lines.Add(l1);
+                    lines.Add(l2);
+                    BOX.Children.Add(l1);
+                    BOX.Children.Add(l2);
+
+                    b2 = b;
+                }
+
+                J[numPlanks] = new Joint();
+                Joint j1 = J[numPlanks];
+                j1.Set(b2, b1, new Vector2f(-9.125f + 1.25f * numPlanks, 5.0f));
+                j1.softness = softness;
+                j1.biasFactor = biasFactor;
+                world.Add(j1);
+                world.Add(j1); ++numJoints;
+                Line l3 = new Line();
+                Line l4 = new Line();
+                lines.Add(l3);
+                lines.Add(l4);
+                BOX.Children.Add(l3);
+                BOX.Children.Add(l4);
             }
             else
             {
@@ -478,7 +608,131 @@ namespace Demo
         {
             if (numBodies == 0 && numJoints == 0)
             {
+                Body b1 = new Body();
+                b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
+                b1.position.Set(0.0f,-0.5f*b1.width.y);
+                world.Add(b1); ++numBodies;
+                Rectangle rect1 = new Rectangle();
+                rects.Add(rect1); BOX.Children.Add(rect1);
 
+                Body b2 = new Body();
+                b2.Set(new Vector2f(12.0f, 0.5f), float.MaxValue);
+                b2.position.Set(-1.5f, 10.0f);
+                world.Add(b2); ++numBodies;
+                Rectangle rect2 = new Rectangle();
+                rects.Add(rect2); BOX.Children.Add(rect2);
+
+                Body[] B = new Body[16];
+                Body b;
+                for (int i=0;i<10;i++) {
+                    B[i] = new Body();
+                    b = B[i];
+                    b.Set(new Vector2f(0.2f,2.0f),10.0f);
+                    b.position.Set(-6.0f+1.0f*i,11.125f);
+                    b.friction=0.1f;
+                    world.Add(b); ++numBodies;
+                    Rectangle rect = new Rectangle();
+                    rects.Add(rect); BOX.Children.Add(rect);
+                }
+                Rectangle temp;
+
+                B[10] = new Body();
+                b = B[10];
+                b.Set(new Vector2f(14.0f, 0.5f), float.MaxValue);
+                b.position.Set(1.0f,6.0f);
+                b.rotation=0.3f;
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                B[11] = new Body();
+                b = B[11];
+                b.Set(new Vector2f(0.5f, 3.0f), float.MaxValue);
+                b.position.Set(-7.0f,4.0f);
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                B[12] = new Body();
+                b = B[12];
+                b.Set(new Vector2f(12.0f, 0.25f), 20.0f);
+                b.position.Set(-0.9f,1.0f);
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                B[13] = new Body();
+                b = B[13];
+                b.Set(new Vector2f(0.5f, 0.5f), 10.0f);
+                b.position.Set(-10.0f,15.0f);
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                B[14] = new Body();
+                b = B[14];
+                b.Set(new Vector2f(2.0f, 2.0f), 20.0f);
+                b.position.Set(6.0f,2.5f);
+                b.friction = 0.1f;
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                B[15] = new Body();
+                b = B[15];
+                b.Set(new Vector2f(2.0f, 0.2f), 10.0f);
+                b.position.Set(6.0f,3.6f);
+                world.Add(b); ++numBodies;
+                temp= new Rectangle();
+                rects.Add(temp); BOX.Children.Add(temp);
+
+                Joint[] J = new Joint[4];
+                Joint j;
+                Line l1, l2;
+
+                J[0] = new Joint();
+                j = J[0];
+                j.Set(b1, B[12], new Vector2f(-2.0f,1.0f));
+                world.Add(j); ++numJoints;
+                l1 = new Line();
+                l2 = new Line();
+                lines.Add(l1);
+                lines.Add(l2);
+                BOX.Children.Add(l1);
+                BOX.Children.Add(l2);
+
+                J[1] = new Joint();
+                j = J[1];
+                j.Set(B[11], B[13], new Vector2f(-7.0f,15.0f));
+                world.Add(j); ++numJoints;
+                l1 = new Line();
+                l2 = new Line();
+                lines.Add(l1);
+                lines.Add(l2);
+                BOX.Children.Add(l1);
+                BOX.Children.Add(l2);
+
+                J[2] = new Joint();
+                j = J[2];
+                j.Set(b1, B[14], new Vector2f(6.0f,2.6f));
+                world.Add(j); ++numJoints;
+                l1 = new Line();
+                l2 = new Line();
+                lines.Add(l1);
+                lines.Add(l2);
+                BOX.Children.Add(l1);
+                BOX.Children.Add(l2);
+
+                J[3] = new Joint();
+                j = J[3];
+                j.Set(B[14], B[15], new Vector2f(7.0f,3.5f));
+                world.Add(j); ++numJoints;
+                l1 = new Line();
+                l2 = new Line();
+                lines.Add(l1);
+                lines.Add(l2);
+                BOX.Children.Add(l1);
+                BOX.Children.Add(l2);
             }
             else
             {
@@ -561,26 +815,12 @@ namespace Demo
                 Step();
             }
         }
+        
         List<Ellipse> ellipses = new List<Ellipse>();
         private void Step()
         {
-            // test
-            // 调用次数
-            //System.Console.WriteLine("**********************************times: " + times + ": ");
-
             world.Step(timeStep);
             ellipses.Clear();
-
-            //int count = 0;
-            //foreach (var dic in world.arbiters)
-            //{
-            //    Arbiter arbiter = dic.Value;
-            //    for (int i = 0; i < arbiter.numContacts; ++i)
-            //    {
-            //        count++;
-            //    }
-            //}
-            // Console.WriteLine(count);
 
             for (int i = 0; i < numBodies; ++i)
             {
@@ -597,12 +837,6 @@ namespace Demo
             Mat22 R = new Mat22(body.rotation);
             Vector2f x = body.position * multiple;
             Vector2f h = 0.5f * body.width * multiple;
-
-            Vector2f v1 = x + R * new Vector2f(-h.x, -h.y);
-            Vector2f v2 = x + R * new Vector2f(h.x, -h.y);
-            Vector2f v3 = x + R * new Vector2f(h.x, h.y);
-            Vector2f v4 = x + R * new Vector2f(-h.x, h.y);
-            
             Vector2f pos = body.position * multiple;
 
             rect.Stroke = System.Windows.Media.Brushes.Yellow;
@@ -616,7 +850,6 @@ namespace Demo
             RotateTransform rotate = new RotateTransform(-body.rotation*180/Math.PI,rect.Width/2,rect.Height/2);
             rect.RenderTransform = rotate;
         }
-
         private Vector2f transf(Vector2f p)
         {
             return new Vector2f(p.x + 480, -p.y);
@@ -650,7 +883,6 @@ namespace Demo
             l2.Y1 = p2.y;
             l2.X2 = x2.x;
             l2.Y2 = x2.y;
-            
 
             l1.Stroke = System.Windows.Media.Brushes.White;
             l2.Stroke = System.Windows.Media.Brushes.Blue;
