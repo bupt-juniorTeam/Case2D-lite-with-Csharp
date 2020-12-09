@@ -92,7 +92,7 @@ namespace Demo
                 
 
                 Body b2 = new Body();
-                b2.Set(new Vector2f(100f, 20f), float.MaxValue);
+                b2.Set(new Vector2f(20f, 20f), float.MaxValue);
                 b2.position.Set(0.0f, 20f);
                 b2.rotation = 0.0f;
                 ++numBodies;
@@ -103,7 +103,7 @@ namespace Demo
 
                 Body b3 = new Body();
                 b3.Set(new Vector2f(20f, 20f), 20f);
-                b3.position.Set(50f, 100f);
+                b3.position.Set(10f, 80f);
                 b3.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b3);
@@ -172,7 +172,7 @@ namespace Demo
             
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
-            RotateTransform rotate = new RotateTransform(-body.rotation*90,rect.Width/2,rect.Height/2);
+            RotateTransform rotate = new RotateTransform(-body.rotation,rect.Width/2,rect.Height/2);
             rect.RenderTransform = rotate;
         }
 
