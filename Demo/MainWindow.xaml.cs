@@ -246,15 +246,17 @@ namespace Demo
             l1.X2 = p1.x;
             l1.Y2 = p1.y;
 
-            l1.X1 = x2.x;
-            l1.Y1 = x2.y;
-            l1.X2 = p2.x;
-            l1.Y2 = p2.y;
+            l2.X1 = x2.x;
+            l2.Y1 = x2.y;
+            l2.X2 = p2.x;
+            l2.Y2 = p2.y;
             l1.Stroke = System.Windows.Media.Brushes.Blue;
 
             l2.Stroke = System.Windows.Media.Brushes.Blue;
-            Canvas.SetLeft(l1, BOX.Width / 2 + pos.x - rect.Width / 2);
-            Canvas.SetBottom(l2, .y - rect.Height / 2);
+            Canvas.SetLeft(l1, BOX.Width / 2);
+            Canvas.SetBottom(l1, 0);
+            Canvas.SetLeft(l2, BOX.Width / 2);
+            Canvas.SetBottom(l2,0);
 
 
         }
