@@ -6,13 +6,24 @@
         xmlns:local="clr-namespace:Demo"
         mc:Ignorable="d"
         Title="MainWindow"  Width="1080" Height="720">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Grid.ColumnSpan="3"  Grid.RowSpan="2">
-            <Button Margin="3" Padding="3" Click="cmdStart_Clicked">Start</Button>
+            <StackPanel Orientation="Horizontal">
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_1">Start1</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_2">Start2</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_3">Start3</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_4">Start4</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_5">Start5</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_6">Start6</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_7">Start7</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_8">Start8</Button>
+            <Button Margin="3" Padding="3" Click="cmdStart_Clicked_9">Start9</Button>
+            </StackPanel>
             <Button Margin="3" Padding="3" Click="cmdStop_Clicked">Stop</Button>
         </StackPanel>
         <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="Black" Grid.ColumnSpan="3" ></Canvas>
