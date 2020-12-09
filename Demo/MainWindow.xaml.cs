@@ -120,49 +120,59 @@ namespace Demo
         //        times++;
         //    }
         //}
+
+
         private void Demo2(object sender, EventArgs e)
         {
-            if (numBodies == 0)
+            if (numBodies == 0 && numJoints == 0)
             {
                 Body b1 = new Body();
-                b1.Set(new Vector2f(1000f, 20f), float.MaxValue);
-                b1.position.Set(0.0f, -0.5f * b1.width.y+10);
+                b1.Set(new Vector2f(1000.0f, 40.0f), float.MaxValue);
+                b1.friction = 0.2f;
+                b1.position.Set(0.0f, -0.5f * b1.width.y);
                 b1.rotation = 0.0f;
-                ++numBodies;
                 world.Add(b1);
                 Rectangle rect1 = new Rectangle();
                 rects.Add(rect1);
-                
-        
+                ++numBodies;
+
                 Body b2 = new Body();
-                b2.Set(new Vector2f(20f, 20f), 100f);
-                b2.friction = 0.2f;
-                b2.position.Set(19.0f, 20f);
+                b2.Set(new Vector2f(20f, 20f), float.MaxValue);
+                b2.position.Set(20.0f, 80f);
                 b2.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
                 rects.Add(rect2);
 
-                Joint j = new Joint();
-                j.Set(b1, b2, new Vector2f(0.0f, 11f));
+                Joint joint = new Joint();
+                joint.Set(b1, b2, new Vector2f(0.0f, 200.0f));
+                world.Add(joint);
                 ++numJoints;
-                world.Add(j);
+
+
                 Line l1 = new Line();
-                lines.Add(l1);
                 Line l2 = new Line();
+              
+
+                lines.Add(l1);
                 lines.Add(l2);
+
                 BOX.Children.Add(rect1);
                 BOX.Children.Add(rect2);
                 BOX.Children.Add(l1);
                 BOX.Children.Add(l2);
+
+
+
             }
             else
             {
-                Step();
                 times++;
-            }
+                Step();
+            }     
         }
+
         List<Ellipse> ellipses = new List<Ellipse>();
         private void Step()
         {
@@ -214,6 +224,7 @@ namespace Demo
             
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
+
             RotateTransform rotate = new RotateTransform(-body.rotation*180/Math.PI,rect.Width/2,rect.Height/2);
             rect.RenderTransform = rotate;
         }
@@ -237,14 +248,19 @@ namespace Demo
             l1.X2 = p1.x;
             l1.Y2 = p1.y;
 
-            l1.X1 = x2.x;
-            l1.Y1 = x2.y;
-            l1.X2 = p2.x;
-            l1.Y2 = p2.y;
-
+            l2.X1 = x2.x;
+            l2.Y1 = x2.y;
+            l2.X2 = p2.x;
+            l2.Y2 = p2.y;
             l1.Stroke = System.Windows.Media.Brushes.Blue;
 
             l2.Stroke = System.Windows.Media.Brushes.Blue;
+            Canvas.SetLeft(l1, BOX.Width / 2);
+            Canvas.SetBottom(l1, 0);
+            Canvas.SetLeft(l2, BOX.Width / 2);
+            Canvas.SetBottom(l2,0);
+
+
         }
     }
 }
