@@ -63,7 +63,7 @@ namespace Demo
 
         const float timeStep = 1.0f/60.0f;
         const int iterations = 10;
-        static Vector2f gravity = new Vector2f(0.0f, -10.0f);
+        static Vector2f gravity = new Vector2f(0.0f, -500.0f);
         static int times = 0;
 
         int numBodies = 0;
@@ -229,7 +229,7 @@ namespace Demo
 
         private Vector2f transf(Vector2f p)
         {
-            return new Vector2f(p.x + 480, 480 - p.y);
+            return new Vector2f(p.x + 480, -p.y);
        
         }
         private void DrawJoint(Joint joint, Line l1, Line l2)
