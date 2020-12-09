@@ -10,16 +10,18 @@ namespace Case2D_lite
             for (int i = 0; i < bodies.Count; i++)
             {
                 Body b = bodies[i];
-                if (b == null)
+                if (b == null || b.mass == float.MaxValue)
                     continue;
-                System.Console.Write("Body: ");
-                System.Console.Write(b.velocity + " ");
-                System.Console.Write(b.position);
+                System.Console.Write("Body: " + b.mass + " ");
+                System.Console.Write("pos: " + b.position + " ");
+                System.Console.Write("rot: " + b.rotation + " ");
+                System.Console.Write("v: " + b.velocity + " ");
+                System.Console.Write("w: " + b.angularVelocity + " ");
                 System.Console.WriteLine();
             }
         }
 
-        public void printArbiter(Dictionary<ArbiterKey, Arbiter> arbs)
+        public void printArbiter(ref Dictionary<ArbiterKey, Arbiter> arbs)
         {
             System.Console.WriteLine("Arbiter: ");
             foreach (KeyValuePair<ArbiterKey, Arbiter> obj in arbs)
@@ -42,10 +44,9 @@ namespace Case2D_lite
                 System.Console.Write("Contact: ");
                 System.Console.Write(contact.position + " ");
                 System.Console.Write(contact.normal + " ");
-                System.Console.Write(contact.massNormal + " ");
+                System.Console.Write(contact.massTangent + " ");
                 System.Console.Write(contact.Pn + " ");
                 System.Console.WriteLine();
-                // System.Console.WriteLine(contact.ToString());
             }
         }
     }
