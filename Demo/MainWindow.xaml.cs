@@ -40,7 +40,7 @@ namespace Demo
                 lines.Clear();
                 rects.Clear();
                 world.Clear();
-                CompositionTarget.Rendering += Demo1;
+                CompositionTarget.Rendering += Demo2;
                 rendering = true;
             }
         }
@@ -51,7 +51,7 @@ namespace Demo
 
         private void StopRendering()
         {
-            CompositionTarget.Rendering -= Demo1;
+            CompositionTarget.Rendering -= Demo2;
             BOX.Children.Clear();
             numBodies = 0;
             numJoints = 0;
@@ -77,7 +77,50 @@ namespace Demo
         List<Rectangle> rects = new List<Rectangle>();
         List<Line> lines = new List<Line>();
 
-        private void Demo1(object sender, EventArgs e)
+        //private void Demo1(object sender, EventArgs e)
+        //{
+        //    if (numBodies == 0)
+        //    {
+        //        Body b1 = new Body();
+        //        b1.Set(new Vector2f(1000f, 20f), float.MaxValue);
+        //        b1.position.Set(0.0f, -0.5f * b1.width.y+10);
+        //        b1.rotation = 0.0f;
+        //        ++numBodies;
+        //        world.Add(b1);
+        //        Rectangle rect1 = new Rectangle();
+        //        rects.Add(rect1);
+        //        
+        //
+        //        Body b2 = new Body();
+        //        b2.Set(new Vector2f(20f, 20f), float.MaxValue);
+        //        b2.position.Set(0.0f, 20f);
+        //        b2.rotation = 0.0f;
+        //        ++numBodies;
+        //        world.Add(b2);
+        //        Rectangle rect2 = new Rectangle();
+        //        rects.Add(rect2);
+        //
+        //
+        //        Body b3 = new Body();
+        //        b3.Set(new Vector2f(20f, 20f), 20f);
+        //        b3.position.Set(10f, 80f);
+        //        b3.rotation = 0.0f;
+        //        ++numBodies;
+        //        world.Add(b3);
+        //        Rectangle rect3 = new Rectangle();
+        //        rects.Add(rect3);
+        //
+        //        BOX.Children.Add(rect1);
+        //        BOX.Children.Add(rect2);
+        //        BOX.Children.Add(rect3);
+        //    }
+        //    else
+        //    {
+        //        Step();
+        //        times++;
+        //    }
+        //}
+        private void Demo2(object sender, EventArgs e)
         {
             if (numBodies == 0)
             {
@@ -90,29 +133,29 @@ namespace Demo
                 Rectangle rect1 = new Rectangle();
                 rects.Add(rect1);
                 
-
+        
                 Body b2 = new Body();
-                b2.Set(new Vector2f(20f, 20f), float.MaxValue);
-                b2.position.Set(0.0f, 20f);
+                b2.Set(new Vector2f(20f, 20f), 100f);
+                b2.friction = 0.2f;
+                b2.position.Set(19.0f, 20f);
                 b2.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
                 rects.Add(rect2);
 
-
-                Body b3 = new Body();
-                b3.Set(new Vector2f(20f, 20f), 20f);
-                b3.position.Set(10f, 80f);
-                b3.rotation = 0.0f;
-                ++numBodies;
-                world.Add(b3);
-                Rectangle rect3 = new Rectangle();
-                rects.Add(rect3);
-
+                Joint j = new Joint();
+                j.Set(b1, b2, new Vector2f(0.0f, 11f));
+                ++numJoints;
+                world.Add(j);
+                Line l1 = new Line();
+                lines.Add(l1);
+                Line l2 = new Line();
+                lines.Add(l2);
                 BOX.Children.Add(rect1);
                 BOX.Children.Add(rect2);
-                BOX.Children.Add(rect3);
+                BOX.Children.Add(l1);
+                BOX.Children.Add(l2);
             }
             else
             {
@@ -120,7 +163,6 @@ namespace Demo
                 times++;
             }
         }
-
         List<Ellipse> ellipses = new List<Ellipse>();
         private void Step()
         {
@@ -172,7 +214,7 @@ namespace Demo
             
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
-            RotateTransform rotate = new RotateTransform(-body.rotation,rect.Width/2,rect.Height/2);
+            RotateTransform rotate = new RotateTransform(-body.rotation*180/Math.PI,rect.Width/2,rect.Height/2);
             rect.RenderTransform = rotate;
         }
 
