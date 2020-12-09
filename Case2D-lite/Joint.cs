@@ -43,7 +43,9 @@ namespace Case2D_lite
             //由于求矩阵的逆比较费时间但是求转置快，所以就求转置了
             Mat22 Rot1T = Rot1.Transpose();
             Mat22 Rot2T = Rot2.Transpose();
+            
 
+            //相对位置
             localAnchor1 = Rot1T * (anchor - body1.position);   //个人理解，先反向旋转，绘制时再反向旋转以抵消
             localAnchor2 = Rot2T * (anchor - body2.position);
 
@@ -134,8 +136,8 @@ namespace Case2D_lite
             body1.angularVelocity -= body1.invI * MyMath.Cross(r1, impulse);
 
 
-            body1.velocity += body2.invMass * impulse;
-            body1.angularVelocity += body2.invI * MyMath.Cross(r2, impulse);
+            body2.velocity += body2.invMass * impulse;
+            body2.angularVelocity += body2.invI * MyMath.Cross(r2, impulse);
 
             P += impulse;
 
