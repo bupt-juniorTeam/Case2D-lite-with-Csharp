@@ -131,14 +131,15 @@ namespace Demo
                 b1.friction = 0.2f;
                 b1.position.Set(0.0f, -0.5f * b1.width.y);
                 b1.rotation = 0.0f;
+                ++numBodies;
                 world.Add(b1);
                 Rectangle rect1 = new Rectangle();
                 rects.Add(rect1);
-                ++numBodies;
+                
 
                 Body b2 = new Body();
-                b2.Set(new Vector2f(20f, 20f), float.MaxValue);
-                b2.position.Set(20.0f, 80f);
+                b2.Set(new Vector2f(20f, 20f), 20f);
+                b2.position.Set(200.0f, 200f);
                 b2.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b2);
@@ -162,9 +163,6 @@ namespace Demo
                 BOX.Children.Add(rect2);
                 BOX.Children.Add(l1);
                 BOX.Children.Add(l2);
-
-
-
             }
             else
             {
@@ -217,7 +215,7 @@ namespace Demo
             
             Vector2f pos = body.position;
 
-            rect.Stroke = System.Windows.Media.Brushes.White;
+            rect.Stroke = System.Windows.Media.Brushes.Yellow;
 
             rect.Width = body.width.x;
             rect.Height = body.width.y;
@@ -240,7 +238,7 @@ namespace Demo
             Vector2f x1 = b1.position;
             Vector2f p1 = x1 + R1 * joint.localAnchor1;
 
-            Vector2f x2 = b1.position;
+            Vector2f x2 = b2.position;
             Vector2f p2 = x2 + R2 * joint.localAnchor2;
 
             l1.X1 = x1.x;
@@ -252,9 +250,9 @@ namespace Demo
             l2.Y1 = x2.y;
             l2.X2 = p2.x;
             l2.Y2 = p2.y;
-            l1.Stroke = System.Windows.Media.Brushes.Blue;
-
             l2.Stroke = System.Windows.Media.Brushes.Blue;
+
+            l1.Stroke = System.Windows.Media.Brushes.White;
             Canvas.SetLeft(l1, BOX.Width / 2);
             Canvas.SetBottom(l1, 0);
             Canvas.SetLeft(l2, BOX.Width / 2);
