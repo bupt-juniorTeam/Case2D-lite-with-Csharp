@@ -172,7 +172,7 @@ namespace Demo
             
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);
-            RotateTransform rotate = new RotateTransform(-body.rotation,rect.Width/2,rect.Height/2);
+            RotateTransform rotate = new RotateTransform(-body.rotation*180,rect.Width/2,rect.Height/2);
             rect.RenderTransform = rotate;
         }
 
