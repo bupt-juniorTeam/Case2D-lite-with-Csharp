@@ -26,6 +26,6 @@
             </StackPanel>
             <Button Margin="3" Padding="3" Click="cmdStop_Clicked">Stop</Button>
         </StackPanel>
-        <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="Black" Grid.ColumnSpan="3" ></Canvas>
+        <Canvas Name="BOX" Grid.Row="1"  Width="960" Height="480" Background="White" Grid.ColumnSpan="3" ></Canvas>
     </Grid>
 </Window>

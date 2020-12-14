@@ -223,6 +223,7 @@ namespace Demo
                 ++numBodies;
                 world.Add(b1);
                 Rectangle rect1 = new Rectangle();
+                rect1.Fill = System.Windows.Media.Brushes.Transparent;
                 rects.Add(rect1);
                 
         
@@ -233,6 +234,7 @@ namespace Demo
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
+                rect2.Fill = System.Windows.Media.Brushes.DeepPink;
                 rects.Add(rect2);
         
         
@@ -243,6 +245,7 @@ namespace Demo
                 ++numBodies;
                 world.Add(b3);
                 Rectangle rect3 = new Rectangle();
+                rect3.Fill = System.Windows.Media.Brushes.BlueViolet;
                 rects.Add(rect3);
         
                 BOX.Children.Add(rect1);
@@ -278,6 +281,7 @@ namespace Demo
                 ++numBodies;
                 world.Add(b2);
                 Rectangle rect2 = new Rectangle();
+                rect2.Fill = System.Windows.Media.Brushes.Blue;
                 rects.Add(rect2);
 
                 Joint joint = new Joint();
@@ -287,7 +291,10 @@ namespace Demo
 
 
                 Line l1 = new Line();
+              
+                l1.StrokeThickness = 3;
                 Line l2 = new Line();
+               
               
 
                 lines.Add(l1);
@@ -314,6 +321,7 @@ namespace Demo
                 b.position.Set(0.0f, -0.5f * b.width.y);
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+               
                 rects.Add(rect); BOX.Children.Add(rect);
 
                 b = new Body();
@@ -322,6 +330,7 @@ namespace Demo
                 b.rotation = -0.25f;
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+                rect.Fill = System.Windows.Media.Brushes.Brown;
                 rects.Add(rect); BOX.Children.Add(rect);
 
                 b = new Body();
@@ -329,6 +338,7 @@ namespace Demo
                 b.position.Set(5.25f, 9.5f);
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+                rect.Fill = System.Windows.Media.Brushes.Brown;
                 rects.Add(rect); BOX.Children.Add(rect);
 
                 b = new Body();
@@ -337,6 +347,7 @@ namespace Demo
                 b.rotation = 0.25f;
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+                rect.Fill = System.Windows.Media.Brushes.Brown;
                 rects.Add(rect); BOX.Children.Add(rect);
 
                 b = new Body();
@@ -344,7 +355,9 @@ namespace Demo
                 b.position.Set(-5.25f, 5.5f);
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+                rect.Fill = System.Windows.Media.Brushes.Brown;
                 rects.Add(rect); BOX.Children.Add(rect);
+                
 
                 b = new Body();
                 b.Set(new Vector2f(13.0f, 0.25f), float.MaxValue);
@@ -352,6 +365,7 @@ namespace Demo
                 b.rotation = -0.25f;
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
+                rect.Fill = System.Windows.Media.Brushes.Brown;
                 rects.Add(rect); BOX.Children.Add(rect);
 
                 float[] friction = {0.75f,0.5f,0.35f,0.1f,0.0f};
@@ -364,6 +378,7 @@ namespace Demo
                     b.position.Set(-7.5f + 2.0f*i,14.0f);
                     world.Add(b); ++numBodies;
                     rect = new Rectangle();
+                    rect.Fill = System.Windows.Media.Brushes.Green;
                     rects.Add(rect); BOX.Children.Add(rect);
                 }
             }
@@ -501,7 +516,9 @@ namespace Demo
                 world.Add(j);
                 numJoints++;
                 Line l1 = new Line();
+                l1.StrokeThickness = 5;
                 Line l2 = new Line();
+                l2.StrokeThickness = 5;
                 lines.Add(l1);
                 lines.Add(l2);
 
@@ -575,7 +592,9 @@ namespace Demo
                     j.biasFactor = biasFactor;
                     world.Add(j); ++numJoints;
                     Line l1 = new Line();
+                    l1.StrokeThickness = 2;
                     Line l2 = new Line();
+                    l2.StrokeThickness = 2;
                     lines.Add(l1);
                     lines.Add(l2);
                     BOX.Children.Add(l1);
@@ -592,7 +611,9 @@ namespace Demo
                 world.Add(j1);
                 world.Add(j1); ++numJoints;
                 Line l3 = new Line();
+                l3.StrokeThickness = 4;
                 Line l4 = new Line();
+                l4.StrokeThickness = 4;
                 lines.Add(l3);
                 lines.Add(l4);
                 BOX.Children.Add(l3);
@@ -800,7 +821,9 @@ namespace Demo
                     world.Add(J[i]);
                     ++numJoints;
                     Line l1 = new Line();
+                    l1.StrokeThickness = 2;
                     Line l2 = new Line();
+                    l2.StrokeThickness = 2;
                     lines.Add(l1);
                     lines.Add(l2);
                     BOX.Children.Add(l1);
@@ -821,15 +844,15 @@ namespace Demo
         {
             world.Step(timeStep);
             ellipses.Clear();
-
+            for (int i = 0; i < numJoints; ++i)
+            {
+                DrawJoint(world.joints[i], lines[2 * i], lines[2 * i + 1]);
+            }
             for (int i = 0; i < numBodies; ++i)
             {
                 DrawBody(world.bodies[i], rects[i]);
             }
-            for (int i = 0; i < numJoints; ++i)
-            {
-                DrawJoint(world.joints[i], lines[i], lines[i+1]);
-            }
+   
         }
 
         private void DrawBody(Body body, Rectangle rect)
@@ -839,7 +862,17 @@ namespace Demo
             Vector2f h = 0.5f * body.width * multiple;
             Vector2f pos = body.position * multiple;
 
-            rect.Stroke = System.Windows.Media.Brushes.Yellow;
+            if (body.invMass == 0)
+            {
+                //rect.Stroke = System.Windows.Media.Brushes.Yellow;
+                rect.Fill = new SolidColorBrush(Color.FromRgb(173, 213, 162));
+                //rect.Fill = System.Windows.Media.Brushes.Yellow;
+            }
+            else
+            {
+                rect.Fill = new SolidColorBrush(Color.FromRgb(99, 187, 208));
+            }
+            //rect.Stroke = System.Windows.Media.Brushes.Yellow;
 
             rect.Width = body.width.x * multiple;
             rect.Height = body.width.y * multiple;
@@ -887,9 +920,12 @@ namespace Demo
             l2.Y1 = p2.y;
             l2.X2 = x2.x;
             l2.Y2 = x2.y;
+            l1.Stroke = new SolidColorBrush(Color.FromRgb(128, 118, 163));
+          
+            l2.Stroke = new SolidColorBrush(Color.FromRgb(128, 118, 163));
 
-            l1.Stroke = System.Windows.Media.Brushes.White;
-            l2.Stroke = System.Windows.Media.Brushes.White;
+            /*l1.Stroke = System.Windows.Media.Brushes.Yellow;
+            l2.Stroke = System.Windows.Media.Brushes.Yellow;*/
             /* l1.HorizontalAlignment = HorizontalAlignment.Left;
              l1.VerticalAlignment = VerticalAlignment.Center;
 
