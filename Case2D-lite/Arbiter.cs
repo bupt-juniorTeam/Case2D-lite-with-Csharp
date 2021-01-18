@@ -51,6 +51,8 @@ namespace Case2D_lite
 		Body body1;
 		Body body2;
 
+		private float e = 0;
+
 		float friction;
 
 		public Body Body1
@@ -224,6 +226,8 @@ namespace Case2D_lite
 				// Apply contact impulse
 				Vector2f Pn = dPn * c.normal;
 
+				Pn *= (e+1);
+
 				b1.velocity -= b1.invMass * Pn; // v = p/m
 				b1.angularVelocity -= b1.invI * MyMath.Cross(c.r1, Pn); // w = 冲量 * 作用距离 / 转动惯量
 
@@ -257,6 +261,8 @@ namespace Case2D_lite
 
 				// Apply contact impulse
 				Vector2f Pt = dPt * tangent;
+
+				Pt *= (e+1);
 
 				b1.velocity -= b1.invMass * Pt; // v = p/m
 				b1.angularVelocity -= b1.invI * MyMath.Cross(c.r1, Pt);
