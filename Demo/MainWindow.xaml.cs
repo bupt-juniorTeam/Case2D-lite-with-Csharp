@@ -218,7 +218,7 @@ namespace Demo
             {
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100f, 20f), float.MaxValue);
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
@@ -251,6 +251,7 @@ namespace Demo
                 BOX.Children.Add(rect1);
                 BOX.Children.Add(rect2);
                 BOX.Children.Add(rect3);
+                world.Initialize();
             }
             else
             {
@@ -265,7 +266,7 @@ namespace Demo
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
                 b1.friction = 0.2f;
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
@@ -304,6 +305,7 @@ namespace Demo
                 BOX.Children.Add(rect2);
                 BOX.Children.Add(l1);
                 BOX.Children.Add(l2);
+                world.Initialize();
             }
             else
             {
@@ -318,7 +320,7 @@ namespace Demo
 
                 b = new Body();
                 b.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
-                b.position.Set(0.0f, -0.5f * b.width.y);
+                b.position.Set(0.0f, -0.5f * b.width_height.y);
                 world.Add(b); ++numBodies;
                 rect = new Rectangle();
                
@@ -381,6 +383,7 @@ namespace Demo
                     rect.Fill = System.Windows.Media.Brushes.Green;
                     rects.Add(rect); BOX.Children.Add(rect);
                 }
+                world.Initialize();
             }
             else
             {
@@ -395,7 +398,7 @@ namespace Demo
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
                 b1.friction = 0.2f;
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
@@ -417,6 +420,7 @@ namespace Demo
                     rects.Add(rect);
                     BOX.Children.Add(rect);
                 }
+                world.Initialize();
             }
             else
             {
@@ -431,7 +435,7 @@ namespace Demo
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
                 b1.friction = 0.2f;
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
@@ -460,6 +464,7 @@ namespace Demo
                     }
                     x += new Vector2f(0.5625f, 2.0f);
                 }
+                world.Initialize();
             }
             else
             {
@@ -473,7 +478,7 @@ namespace Demo
             {
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 ++numBodies;
                 world.Add(b1);
                 Rectangle rect1 = new Rectangle();
@@ -529,6 +534,7 @@ namespace Demo
                 BOX.Children.Add(rect5);
                 BOX.Children.Add(l1);
                 BOX.Children.Add(l2);
+                world.Initialize();
             }
             else
             {
@@ -543,7 +549,7 @@ namespace Demo
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
                 b1.friction = 0.2f;
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 world.Add(b1); ++numBodies;
                 Rectangle rect1 = new Rectangle();
@@ -618,6 +624,7 @@ namespace Demo
                 lines.Add(l4);
                 BOX.Children.Add(l3);
                 BOX.Children.Add(l4);
+                world.Initialize();
             }
             else
             {
@@ -631,7 +638,7 @@ namespace Demo
             {
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
-                b1.position.Set(0.0f,-0.5f*b1.width.y);
+                b1.position.Set(0.0f,-0.5f*b1.width_height.y);
                 world.Add(b1); ++numBodies;
                 Rectangle rect1 = new Rectangle();
                 rects.Add(rect1); BOX.Children.Add(rect1);
@@ -754,6 +761,7 @@ namespace Demo
                 lines.Add(l2);
                 BOX.Children.Add(l1);
                 BOX.Children.Add(l2);
+                world.Initialize();
             }
             else
             {
@@ -768,7 +776,7 @@ namespace Demo
                 Body b1 = new Body();
                 b1.Set(new Vector2f(100.0f, 20.0f), float.MaxValue);
                 b1.friction = 0.2f;
-                b1.position.Set(0.0f, -0.5f * b1.width.y);
+                b1.position.Set(0.0f, -0.5f * b1.width_height.y);
                 b1.rotation = 0.0f;
                 ++numBodies;
                 world.Add(b1);
@@ -830,7 +838,7 @@ namespace Demo
                     BOX.Children.Add(l2);
                     b = B[i];
                 }
-                
+                world.Initialize();
             }
             else
             {
@@ -859,7 +867,7 @@ namespace Demo
         {
             Mat22 R = new Mat22(body.rotation);
             Vector2f x = body.position * multiple;
-            Vector2f h = 0.5f * body.width * multiple;
+            Vector2f h = 0.5f * body.width_height * multiple;
             Vector2f pos = body.position * multiple;
 
             if (body.invMass == 0)
@@ -874,8 +882,8 @@ namespace Demo
             }
             //rect.Stroke = System.Windows.Media.Brushes.Yellow;
 
-            rect.Width = body.width.x * multiple;
-            rect.Height = body.width.y * multiple;
+            rect.Width = body.width_height.x * multiple;
+            rect.Height = body.width_height.y * multiple;
             
             Canvas.SetLeft(rect, BOX.Width / 2 + pos.x - rect.Width/2);
             Canvas.SetBottom(rect, pos.y-rect.Height/2);

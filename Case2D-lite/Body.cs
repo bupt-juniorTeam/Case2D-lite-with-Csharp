@@ -18,7 +18,7 @@ namespace Case2D_lite
 		public Vector2f force = new Vector2f(); // 力(向量)
 		public float torque; // 力矩
 
-		public Vector2f width = new Vector2f(); // 长和宽 (w,h)
+		public Vector2f width_height = new Vector2f(); // 长和宽 (w,h)
 
 		public float friction; // 摩擦力
 		public float mass, invMass; // 质量 1/质量
@@ -35,7 +35,7 @@ namespace Case2D_lite
 			torque = 0.0f;
 			friction = 0.2f;
 
-			width.Set(1.0f, 1.0f);
+			width_height.Set(1.0f, 1.0f);
 			mass = float.MaxValue;
 			invMass = 0.0f;
 			I = float.MaxValue;
@@ -52,13 +52,13 @@ namespace Case2D_lite
 			torque = 0.0f;
 			friction = 0.2f;
 
-			width = w;
+			width_height = w;
 			mass = m;
 
 			if (mass < float.MaxValue)
 			{
 				invMass = 1.0f / mass;
-				I = mass * (width.x * width.x + width.y * width.y) / 12.0f; // 长方体转动惯量计算公式
+				I = mass * (width_height.x * width_height.x + width_height.y * width_height.y) / 12.0f; // 长方体转动惯量计算公式
 				invI = 1.0f / I;
 			}
 			else
@@ -73,5 +73,7 @@ namespace Case2D_lite
 		{
 			force += f;
 		}
+
+
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Case2D.Common;
-using Case2D_lite;
+using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// Summary description for Class1
@@ -33,13 +34,11 @@ namespace Case2D_lite
 		public float bias;
 		public FeaturePair feature=new FeaturePair();
 	}
-	public struct ArbiterKey
+	public struct ContactPair
 	{
 		public Body body1;
 		public Body body2;
-		//ArbiterKey(ref Body b1, ref Body b2) 
-		//{
-		//}
+	
 	}
 	public class Arbiter
 	{
@@ -75,6 +74,7 @@ namespace Case2D_lite
 			body2 = b2;
 
 		}
+
 
 		/// <summary>
 		/// 更新contact

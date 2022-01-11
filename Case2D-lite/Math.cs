@@ -630,7 +630,7 @@ namespace Case2D.Common
         public Transform() { }
 
         /// Initialize using a position vector and a rotation.
-        Transform(Vector2f position, Rot rotation)
+        public Transform(Vector2f position, Rot rotation)
         {
             p = position;
             q = rotation;
