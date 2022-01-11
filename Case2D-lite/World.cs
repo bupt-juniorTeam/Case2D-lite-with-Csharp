@@ -63,7 +63,7 @@ namespace Case2D_lite
             test.printArbiter(ref arbiters);*/
             float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
 
-            BroadPhase();
+            BroadPhase2();
 
             // 更新力
             for (int i = 0; i < bodies.Count(); ++i) // 遍历所有物体

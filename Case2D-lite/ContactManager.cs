@@ -18,7 +18,7 @@ namespace Case2D_lite
         public Dictionary<Body, int> m_body2proxy;
 
         public List<ContactPair> m_contactPairs;   //碰撞对
-        public List<ContactIDs> m_contactIDs; //碰撞对ID
+        public HashSet<ContactIDs> m_contactIDs; //碰撞对ID
        
         public ContactManager()
         {
@@ -26,7 +26,7 @@ namespace Case2D_lite
             m_proxy2body = new Dictionary<int, Body>();
             m_contactPairs = new List<ContactPair>();
             m_body2proxy = new Dictionary<Body, int>();
-            m_contactIDs = new List<ContactIDs>();
+            m_contactIDs = new HashSet<ContactIDs>();
         }
         public void Initialize(List<Body> bodies)
         {
