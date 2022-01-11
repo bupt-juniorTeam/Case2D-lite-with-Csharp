@@ -21,10 +21,10 @@ namespace Case2D_lite
             }
         }
 
-        public void printArbiter(ref Dictionary<ArbiterKey, Arbiter> arbs)
+        public void printArbiter(ref Dictionary<ContactPair, Arbiter> arbs)
         {
             System.Console.WriteLine("Arbiter: ");
-            foreach (KeyValuePair<ArbiterKey, Arbiter> obj in arbs)
+            foreach (KeyValuePair<ContactPair, Arbiter> obj in arbs)
             {
                 Arbiter arb = obj.Value;
                 List<Body> bodies = new List<Body>();

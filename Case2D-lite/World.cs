@@ -5,27 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Case2D.Common;
-namespace Case2D_lite {
-    public class World {
+namespace Case2D_lite
+{
+    public class World
+    {
         public int iterations; // 迭代速度
         public Vector2f gravity; // 重力加速度
         public List<Body> bodies; // 物体
         public List<Joint> joints; // 关节
-        public Dictionary<ArbiterKey, Arbiter> arbiters; // 碰撞
+        public Dictionary<ContactPair, Arbiter> arbiters; // 碰撞
+        public ContactManager contactManager;
         public static bool accumulateImpulses = true;
         public static bool warmStarting = true;
         public static bool positionCorrection = true;
         private Test test;
-        public World(Vector2f gravity,int iterations)
+        public World(Vector2f gravity, int iterations)
         {
             this.gravity = new Vector2f();
             this.bodies = new List<Body>();
             this.joints = new List<Joint>();
-            this.arbiters = new Dictionary<ArbiterKey, Arbiter>();
+            this.arbiters = new Dictionary<ContactPair, Arbiter>();
             this.gravity = gravity; // 重力加速度(0,-9.8)
             this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations
             this.test = new Test();
-            
+            this.contactManager = new ContactManager();
+
         }
         public void Add(Body body)
         {
@@ -40,8 +44,12 @@ namespace Case2D_lite {
             bodies.Clear();
             joints.Clear();
             arbiters.Clear();
+            contactManager.Reset();
         }
-
+        public void Initialize()
+        {
+            contactManager.Initialize(bodies);
+        }
         /// <summary>
         /// 分为几个阶段：
         /// 碰撞检测：BroadPhase NarrowPhase(调用collide())
@@ -51,9 +59,11 @@ namespace Case2D_lite {
         /// </summary>
         public void Step(float dt)
         {
+            /*test.printBody(ref bodies);
+            test.printArbiter(ref arbiters);*/
             float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
 
-            BroadPhase();
+            BroadPhase2();
 
             // 更新力
             for (int i = 0; i < bodies.Count(); ++i) // 遍历所有物体
@@ -102,10 +112,47 @@ namespace Case2D_lite {
 
                 b.force.Set(0.0f, 0.0f);
                 b.torque = 0.0f;
+
+            }
+            contactManager.PostUpdate(bodies);
+
+        }
+
+        public void BroadPhase()
+        {
+
+            //浅拷贝可能有问题，引擎会爆炸
+            List<ContactPair> pairs = contactManager.FindContacts();
+
+            foreach (var pair in pairs)
+            {
+                Body bi = pair.body1;
+                Body bj = pair.body2;
+                Arbiter newArb = new Arbiter(ref bi, ref bj);
+                ContactPair key;
+                key.body1 = bi;
+                key.body2 = bj;
+                if (newArb.numContacts > 0)
+                {
+                    bool is_find = arbiters.TryGetValue(key, out Arbiter iter);
+                    if (!is_find)
+                    {
+                        arbiters.Add(key, newArb);
+                    }
+                    else
+                    {
+                        iter.Update(ref newArb.contacts, newArb.numContacts);
+                    }
+                }
+                else
+                {
+                    arbiters.Remove(key);
+                }
             }
 
         }
-        public void BroadPhase()
+
+        public void BroadPhase2()
         {
             // O(n^2) broad-phase
             for (int i = 0; i < (int)bodies.Count(); ++i)
@@ -120,7 +167,7 @@ namespace Case2D_lite {
                         continue;
 
                     Arbiter newArb = new Arbiter(ref bi, ref bj);
-                    ArbiterKey key;
+                    ContactPair key;
                     key.body1 = bi;
                     key.body2 = bj;
                     if (newArb.numContacts > 0)

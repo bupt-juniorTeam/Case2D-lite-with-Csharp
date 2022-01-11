@@ -167,8 +167,8 @@ namespace Case2D_lite {
         public static int Collide(ref Contact[] contacts, Body bodyA, Body bodyB)
         {
         // 初始化
-            Vector2f hA = 0.5f * bodyA.width;
-            Vector2f hB = 0.5f * bodyB.width;
+            Vector2f hA = 0.5f * bodyA.width_height;
+            Vector2f hB = 0.5f * bodyB.width_height;
 
             Vector2f posA = bodyA.position;
             Vector2f posB = bodyB.position;
@@ -346,5 +346,7 @@ namespace Case2D_lite {
             }
             return numContacts;
         }
+
+    
     }
 }
