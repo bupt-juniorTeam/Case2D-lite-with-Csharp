@@ -253,7 +253,7 @@ namespace Case2D_lite
             //根据proxyId移除叶子
             RemoveLeaf(proxyId);
 
-            m_nodes[proxyId].aabb = aabb;
+            m_nodes[proxyId].aabb=aabb;
 
             InsertLeaf(proxyId);
 
@@ -295,6 +295,7 @@ namespace Case2D_lite
             Stack<int> stack = new Stack<int>();
             stack.Push(m_root);
             AABB aabb = GetFatAABB(thisNodeId);
+
             while (stack.Count() > 0)
             {
                 int nodeId = stack.Pop();

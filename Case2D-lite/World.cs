@@ -59,9 +59,11 @@ namespace Case2D_lite
         /// </summary>
         public void Step(float dt)
         {
+            /*test.printBody(ref bodies);
+            test.printArbiter(ref arbiters);*/
             float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
 
-            BroadPhase2();
+            BroadPhase();
 
             // 更新力
             for (int i = 0; i < bodies.Count(); ++i) // 遍历所有物体
@@ -112,13 +114,14 @@ namespace Case2D_lite
                 b.torque = 0.0f;
 
             }
-            //contactManager.PostUpdate(bodies);
+            contactManager.PostUpdate(bodies);
 
         }
 
         public void BroadPhase()
         {
 
+            //浅拷贝可能有问题，引擎会爆炸
             List<ContactPair> pairs = contactManager.FindContacts();
 
             foreach (var pair in pairs)

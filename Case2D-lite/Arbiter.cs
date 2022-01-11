@@ -38,7 +38,7 @@ namespace Case2D_lite
 	{
 		public Body body1;
 		public Body body2;
-	
+		
 	}
 	public class Arbiter
 	{
