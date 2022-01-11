@@ -62,7 +62,7 @@ namespace Case2D_lite
 
         public AABB ComputerAABB(Body body)
         {
-            //注意应当绕质心旋转
+            //注意应当先绕原点旋转，再平移
        
             Mat22 R = new Mat22(body.rotation);
             Vector2f tranlate = body.position;

@@ -249,7 +249,14 @@ namespace Case2D_lite
 	***************************************************************************/
         public void MoveProxy(int proxyId, AABB aabb)
         {
-
+       /*     AABB fatAABB = new AABB();
+            Vector2f r = new Vector2f(Settings.aabbExtension, Settings.aabbExtension);
+            fatAABB.lowerBound = m_nodes[proxyId].aabb.lowerBound - 0.0f*r;
+            fatAABB.upperBound = m_nodes[proxyId].aabb.upperBound + 0.0f*r;
+            if (fatAABB.Contains(aabb))
+            {
+                return;
+            }*/
             //根据proxyId移除叶子
             RemoveLeaf(proxyId);
 
