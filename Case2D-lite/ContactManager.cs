@@ -11,13 +11,13 @@ namespace Case2D_lite
     {
         private DynamicTree m_bvhTree;
         public Dictionary<int, Body> m_proxy2body; // 映射，树中的节点号映射至物体
-        public HashSet<ContactPair> m_contactPairs;   //碰撞对
+        public List<ContactPair> m_contactPairs;   //碰撞对
         public Dictionary<Body, int> m_body2proxy;
         public ContactManager()
         {
             m_bvhTree = new DynamicTree();
             m_proxy2body = new Dictionary<int, Body>();
-            m_contactPairs = new HashSet<ContactPair>();
+            m_contactPairs = new List<ContactPair>();
             m_body2proxy = new Dictionary<Body, int>();
         }
         public void Initialize(List<Body> bodies)
@@ -44,18 +44,7 @@ namespace Case2D_lite
             m_bvhTree.Reset();
         }
        
-        public bool MoveAABBInTree(Body body)
-        {
-            int proxyId = m_body2proxy[body];
-
-            //TODO:
-            //更新物体的包围盒
-            AABB aabb = ComputerAABB(body);
-
-            Vector2f vector2 = new Vector2f(0, 0);
-            //更新在树中的位置
-            return m_bvhTree.MoveProxy(proxyId, aabb, vector2);
-        }
+       
 
         public AABB ComputerAABB(Body body)
         {
@@ -85,21 +74,27 @@ namespace Case2D_lite
             return aabb;
         }
 
-        public void PostUpdate()
+        public void PostUpdate(List<Body> bodies)
         {
-            foreach (var contact in m_contactPairs.ToList())
+            /* foreach (var contact in m_contactPairs.ToList())
+             {
+                 AABB aabb1 = ComputerAABB(contact.body1);
+                 AABB aabb2 = ComputerAABB(contact.body2);
+                 if (!AABB.TestOverlap(aabb1, aabb2))
+                 {
+                     m_contactPairs.Remove(contact);
+                 }
+             }*/
+            foreach(var body in bodies)
             {
-                AABB aabb1 = ComputerAABB(contact.body1);
-                AABB aabb2 = ComputerAABB(contact.body2);
-                if (!AABB.TestOverlap(aabb1, aabb2))
-                {
-                    m_contactPairs.Remove(contact);
-                }
+                MoveAABBInTree(body);
             }
+            m_contactPairs.Clear();
 
         }
 
-        public HashSet<ContactPair> FindContacts()
+
+        public List<ContactPair> FindContacts()
         {
 
             foreach (var proxy in m_proxy2body)
@@ -121,6 +116,17 @@ namespace Case2D_lite
             return m_contactPairs;
         }
 
+        private void MoveAABBInTree(Body body)
+        {
+            int proxyId = m_body2proxy[body];
+
+            //TODO:
+            //更新物体的包围盒
+            AABB aabb = ComputerAABB(body);
+
+            //更新在树中的位置
+            m_bvhTree.MoveProxy(proxyId, aabb);
+        }
 
     }
 }

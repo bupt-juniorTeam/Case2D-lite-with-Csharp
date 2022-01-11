@@ -247,66 +247,18 @@ namespace Case2D_lite
         否则不用
         http://allenchou.net/2014/02/game-physics-broadphase-dynamic-aabb-tree/
 	***************************************************************************/
-        public bool MoveProxy(int proxyId, AABB aabb, Vector2f displacement)
+        public void MoveProxy(int proxyId, AABB aabb)
         {
-            AABB fatAABB = new AABB();
-            Vector2f r = new Vector2f(Settings.aabbExtension, Settings.aabbExtension);
-            fatAABB.lowerBound = aabb.lowerBound - r;
-            fatAABB.upperBound = aabb.upperBound + r;
-
-            /*          // Predict AABB movement
-                      Vector2f d = Settings.aabbMultiplier * displacement;
-
-                      if (d.x < 0.0)
-                      {
-                          fatAABB.lowerBound.x += d.x;
-                      }
-                      else
-                      {
-                          fatAABB.upperBound.x += d.x;
-                      }
-
-                      if (d.y < 0.0)
-                      {
-                          fatAABB.lowerBound.y += d.y;
-                      }
-                      else
-                      {
-                          fatAABB.upperBound.y += d.y;
-                      }*/
-            //老包围盒
-            AABB treeAABB = m_nodes[proxyId].aabb;
-            if (treeAABB.Contains(aabb))
-            {
-                // The tree AABB still contains the object, but it might be too large.
-                // Perhaps the object was moving fast but has since gone to sleep.
-                // The huge AABB is larger than the new fat AABB.
-                //有可能此时的包围盒仍然包围着新的包围盒，但有可能太大了（过大的话会导致树不平衡）
-                AABB hugeAABB;
-                hugeAABB.lowerBound = fatAABB.lowerBound - 4.0f * r;
-                hugeAABB.upperBound = fatAABB.upperBound + 4.0f * r;
-                //如果不是过大，则不需要重插
-                if (hugeAABB.Contains(treeAABB))
-                {
-                    // The tree AABB contains the object AABB and the tree AABB is
-                    // not too large. No tree update needed.
-                    return false;
-                }
-
-                // Otherwise the tree AABB is huge and needs to be shrunk
-                //需要重插
-            }
 
             //根据proxyId移除叶子
             RemoveLeaf(proxyId);
 
-            m_nodes[proxyId].aabb = fatAABB;
+            m_nodes[proxyId].aabb = aabb;
 
             InsertLeaf(proxyId);
 
             m_nodes[proxyId].moved = true;
 
-            return true;
 
         }
 
@@ -346,7 +298,8 @@ namespace Case2D_lite
             while (stack.Count() > 0)
             {
                 int nodeId = stack.Pop();
-                if (nodeId == nullNode) continue;
+                if (nodeId == nullNode || nodeId == thisNodeId)
+                    continue;
 
                 TreeNode node = m_nodes[nodeId];
 
@@ -356,8 +309,8 @@ namespace Case2D_lite
                     //如果是叶子节点，说明树上有AABB和输入的aabb重叠。
                     if (node.IsLeaf())
                     {
-                        if (nodeId != thisNodeId)
-                            return nodeId;
+
+                        return nodeId;
 
                     }
                     else
@@ -702,7 +655,7 @@ namespace Case2D_lite
             {
                 int iF = m_nodes[iC].child1;
                 int iG = m_nodes[iC].child2;
-  
+
 
                 // Swap A and C
                 m_nodes[iC].child1 = iA;

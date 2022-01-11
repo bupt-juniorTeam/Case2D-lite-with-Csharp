@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Case2D.Common;
-namespace Case2D_lite {
-    public class World {
+namespace Case2D_lite
+{
+    public class World
+    {
         public int iterations; // 迭代速度
         public Vector2f gravity; // 重力加速度
         public List<Body> bodies; // 物体
@@ -17,7 +19,7 @@ namespace Case2D_lite {
         public static bool warmStarting = true;
         public static bool positionCorrection = true;
         private Test test;
-        public World(Vector2f gravity,int iterations)
+        public World(Vector2f gravity, int iterations)
         {
             this.gravity = new Vector2f();
             this.bodies = new List<Body>();
@@ -27,7 +29,7 @@ namespace Case2D_lite {
             this.iterations = iterations; // 每个时间步长迭代次数：dt * iterations
             this.test = new Test();
             this.contactManager = new ContactManager();
-            
+
         }
         public void Add(Body body)
         {
@@ -59,7 +61,7 @@ namespace Case2D_lite {
         {
             float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f; // 时间步长 dt 1/dt
 
-            BroadPhase();
+            BroadPhase2();
 
             // 更新力
             for (int i = 0; i < bodies.Count(); ++i) // 遍历所有物体
@@ -108,15 +110,16 @@ namespace Case2D_lite {
 
                 b.force.Set(0.0f, 0.0f);
                 b.torque = 0.0f;
-                contactManager.MoveAABBInTree(b);
+
             }
-            contactManager.PostUpdate();
+            //contactManager.PostUpdate(bodies);
 
         }
+
         public void BroadPhase()
         {
 
-            List<ContactPair> pairs=contactManager.FindContacts().ToList<ContactPair>();
+            List<ContactPair> pairs = contactManager.FindContacts();
 
             foreach (var pair in pairs)
             {
@@ -143,7 +146,12 @@ namespace Case2D_lite {
                     arbiters.Remove(key);
                 }
             }
-           /* // O(n^2) broad-phase
+
+        }
+
+        public void BroadPhase2()
+        {
+            // O(n^2) broad-phase
             for (int i = 0; i < (int)bodies.Count(); ++i)
             {
                 Body bi = bodies[i];
@@ -176,7 +184,7 @@ namespace Case2D_lite {
                         arbiters.Remove(key);
                     }
                 }
-            }*/
+            }
         }
     }
 }
